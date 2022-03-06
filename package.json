@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.4.2",
+    "axios": "^0.24.0",
+    "child-process": "^1.0.2",
+    "ethers": "^5.5.4",
+    "http": "^0.0.0",
+    "url": "^0.11.0"
+  },
+  "main": "main.js",
+  "name": "onlyplus",
+  "version": "1.0.0",
+  "description": "node movie streaming",
+  "scripts": {
+    "start": "node main.js",
+    "test": "node main.js"
+  },
+  "engines": {
+    "node": "14.x"
+  },
+  "author": "Enmanuel D Becerra C",
+  "license": "ISC"
+}
