@@ -1,5 +1,5 @@
 //TODO: Libreries ########################################################### //
-const readline = require('readline');
+//const readline = require('readline');
 const axios = require('axios');
 const http = require('http');
 const url = require('url');
@@ -7,12 +7,6 @@ const fs = require('fs');
 
 const path = "./www";
 const port = 5000;
-
-const getIpInfo = (addr)=>{
-	axios.get(`http://ip-api.com/json/${addr}`)
-  	.then(response => { console.log( response ); })
-  	.catch(error => { console.log(error); });
-}
 
 //TODO: String Normalization ################################################ //
 const slugify = str => { const map = {
@@ -149,7 +143,6 @@ let file = axios.get('https://store.externulls.com/webmasters/data.txt?days_back
 	console.log( response );
 })
 .catch( err=>{ console.log(e) } );
-*/
 
 const readInterface = readline.createInterface({
     input: fs.createReadStream('embed.csv'),
@@ -160,3 +153,4 @@ const readInterface = readline.createInterface({
 readInterface.on('line', function(line) {
     console.log( line.split('|') );
 });
+*/
