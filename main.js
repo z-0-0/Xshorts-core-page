@@ -6,7 +6,7 @@ const url = require('url');
 const fs = require('fs');
 
 const path = "./www";
-const port = 5000;
+const port = process.env.PORT | 5000;
 
 //TODO: String Normalization ################################################ //
 const slugify = str => { const map = {
