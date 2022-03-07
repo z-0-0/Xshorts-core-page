@@ -1,12 +1,13 @@
 //TODO: Libreries ########################################################### //
-//const readline = require('readline');
+
+const readline = require('readline');
 const axios = require('axios');
 const http = require('http');
 const url = require('url');
 const fs = require('fs');
 
 const path = "./www";
-const port = process.env.PORT | 5000;
+const port = process.env.PORT || 8888;
 
 //TODO: String Normalization ################################################ //
 const slugify = str => { const map = {
@@ -16,10 +17,10 @@ const slugify = str => { const map = {
    	'u' : 'ú|ù|û|ü|Ú|Ù|Û|Ü',
    	'o' : 'ó|ò|ô|õ|ö|Ó|Ò|Ô|Õ|Ö',
    	'a' : 'á|à|ã|â|ä|À|Á|Ã|Â|Ä',
-	''	: ` |:|_|!|¡|¿|\\?|#|/|,|'|"|’`,
+	''	: ` |:|_|!|¡|¿|\\?|#|/|,|-|'|"|’`,
 };	for (var pattern in map) { 
-		str=str.replace( new RegExp(map[pattern],'g' ), pattern); }
-	return str.toLowerCase();
+		str=str.replace( new RegExp(map[pattern],'g' ), pattern); 
+	}	return str.toLowerCase();
 }
 
 //TODO: String Normalization ################################################ //
@@ -67,11 +68,11 @@ const mimeType = {
 };
 
 //TODO: header Functions XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX   //
-header = ( mimeType ="text/plain" )=>{
+header = ( mimeType="text/plain" )=>{
 	return { 'Access-Control-Allow-Origin':'*', 'Content-Type':mimeType };
 }
 
-chunkheader = ( start,end,size,mimeType ="text/plain" )=>{
+chunkheader = ( start,end,size,mimeType="text/plain" )=>{
 	const contentLength = end-start+1;
 	return {
 		"Content-Range":`bytes ${start}-${end}/${size}`,
@@ -87,8 +88,8 @@ http.createServer( (req, res)=>{
 	
 	var q = url.parse(req.url, true);
 	var d = q.query;
-	
-	//TODO: Server Conditions ############################################### //
+			
+	//TODO: Server Pages #################################################### //
 	if( q.pathname=="/" ){
 		fs.readFile(`${path}/index.html`, (err,data)=>{
 			if (err) {
@@ -98,7 +99,125 @@ http.createServer( (req, res)=>{
 			res.write(data); res.end();
 		});
 	}
+	else if( q.pathname=="/category" ){
+		fs.readFile(`${path}/category.html`, (err,data)=>{
+			if (err) {
+				res.writeHead(404, header('text/html'));
+				return res.end("404 Not Found"); }
+			res.writeHead(200,header('text/html'));
+			res.write(data); res.end();
+		});
+	}
+	else if( q.pathname=="/play" ){
+		fs.readFile(`${path}/player.html`, (err,data)=>{
+			if (err) {
+				res.writeHead(404, header('text/html'));
+				return res.end("404 Not Found"); }
+			res.writeHead(200,header('text/html'));
+			res.write(data); res.end();
+		});
+	}
 	
+	//TODO: Server Conditions ############################################### //
+	else if( q.pathname == '/request' ){
+		
+		let data = new Array();
+		
+		const readInterface = readline.createInterface({
+			input: fs.createReadStream('./newdata'),
+		//	output: process.stdout,
+			console: false
+		});
+		
+		try{ let i=0;
+			readInterface.on('line', (line)=>{ 
+
+				if( d.filter=='undefined' ){i++; 
+					if( i>d.start && i<d.end ) data.push(line);
+				} else if( d.filter=='random' ){
+					if( Math.random()>0.7 ){ i++; 
+						if( i>d.start && i<d.end ) data.push(line);
+					}
+				} else{ 
+					let index = slugify(line).search( slugify(d.filter) );
+					if( index>=0 ){ i++; 
+						if( i>d.start && i<d.end ) data.push(line);
+					}
+				}
+					
+			});
+		} catch(e) {}
+		
+		readInterface.on('close', (line)=>{
+			res.writeHead(200, header('text/plain'));
+			res.end( JSON.stringify(data) );
+		});
+		
+	}
+	
+	else if( q.pathname == '/hls' ){
+		axios.get(`https://store.externulls.com/facts/file/${d.id}`,{ responseType: 'json' })
+		.then( async(response)=>{
+			
+			if( response.data['fc_facts'][0]['hls_resources'] === undefined ){
+				res.writeHead(200, header('text/plain'));
+				res.end( JSON.stringify(response.data['file']['hls_resources']) );
+			} else {
+				res.writeHead(200, header('text/plain'));
+				res.end( JSON.stringify(response.data['fc_facts'][0]['hls_resources']) );
+			}
+			
+		});
+	}
+	
+	else if( q.pathname.startsWith("/thumbs") || q.pathname.startsWith("/vp.") 
+		  || q.pathname.endsWith(".ts") || q.pathname.startsWith("/store") ){		
+		axios.get( `https:/${q.path}`,{ responseType: 'arraybuffer' } )
+		.then( async(response)=>{
+			res.writeHead(200, header('text/plain'));
+			res.end( response.data );
+		});
+	}
+	
+	else if( q.pathname.startsWith("/key") ){
+		axios.get( `https://video.beeg.com${q.pathname}` )
+		.then( async(response)=>{
+				
+			let file = response.data.toString().split('\n');
+			let url = new Array();
+			let sec = 0;
+				
+			for( var i in file ){ 
+				if( file[i].startsWith('http') ){
+						
+					let index = [
+						file[i].indexOf('http') + 7,
+						file[i].indexOf('.com') + 4,
+						file[i].indexOf('.mp4') + 4,							
+					];
+						
+					url = [
+						file[i].slice(index[0],index[1]),
+						file[i].slice(index[1],index[2]),
+						file[i].slice(index[2])
+					];
+					
+					break;
+					
+				}
+			}
+				
+			file = file.map( line=>{
+				if( !line.startsWith('#') ){
+					sec++; return `${url[0]}${url[1]}/seg-${sec}-v1-a1.ts`; 
+				} else return line;
+			});
+				
+			res.writeHead(200, header('application/vnd.apple.mpegurl'));
+			res.end( file.join('\n') );
+		});
+	}
+		
 	//TODO: Server Chunk   XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX //
 	else{
 		const keys = Object.keys(mimeType);
@@ -131,26 +250,9 @@ http.createServer( (req, res)=>{
 			}
 		}	
 		
-		res.writeHead(404, header('text/html'));
-		res.end("404 File Not Found");
+		//res.writeHead(404, header('text/html'));
+		//res.end("404 File Not Found");
 	}	
 	
 }).listen(port); console.log(`server started at localhost:${port}`);
 
-/*
-let file = axios.get('https://store.externulls.com/webmasters/data.txt?days_back=100&delimiter=%27|%27&secondary_delimiter=%27,%27&thumbs_number=7&fields=title,url,duration,people,tags&trim_tags=true&thumb_params=size=320x240')
-.then( response=>{
-	console.log( response );
-})
-.catch( err=>{ console.log(e) } );
-
-const readInterface = readline.createInterface({
-    input: fs.createReadStream('embed.csv'),
-//	output: process.stdout,
-    console: false
-});
-
-readInterface.on('line', function(line) {
-    console.log( line.split('|') );
-});
-*/

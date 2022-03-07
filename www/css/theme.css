@@ -1,0 +1,7 @@
+.img{ padding:20; }
+body{ overflow:hidden; }
+.aside{ min-width:100px; }
+content{ 
+	max-height: 90vh!important;	
+	overflow:auto; 
+}

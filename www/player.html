@@ -1,0 +1,159 @@
+<!Doctype html>
+<html>
+
+	<head lang="en">
+		<meta charset="UTF-8">
+		<meta name="description" content="Free Web tutorials">
+  		<meta name="keywords" content="HTML, CSS, JavaScript">
+ 		<meta name="author" content="Enmanuel Becerra">
+  		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  		
+  		<title> 18yPorn </title>
+  		
+		<!-- UIkit -->
+		<script src="https://cdn.jsdelivr.net/npm/uikit@3.9.3/dist/js/uikit.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/uikit@3.9.3/dist/js/uikit-icons.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.9.3/dist/css/uikit.min.css" />
+		
+		<!-- HLS Player -->
+		<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+		<!-- my code -->
+		<link rel="stylesheet" href="/css/theme.css">
+		<script src="./js/event.js"> </script>
+		<script src="./js/player.js"> </script>
+	
+	</head>
+
+	<body class="uk-flex" uk-height-viewport="offset-top: true">	
+	
+		<aside id="asideMenu">
+			<div class="uk-navbar-left uk-light uk-flex uk-flex-center aside uk-visible@m" style="background:tomato;">
+				<div class="uk-navbar-nav">
+        			<a class="uk-navbar-toggle" uk-navbar-toggle-icon uk-toggle="target: #asideMenu; animation: uk-animation-fade"></a>
+				</div>
+			</div>
+		
+			<div class="uk-padding-small uk-padding-remove-horizontal uk-light uk-child-width-expand aside uk-visible@m uk-height-1-1" style="background:#222;">
+				<a href="/" class="uk-margin uk-icon uk-icon-image" style="background-image: url(./img/start.png);"></a>
+				<a href="/category" class="uk-margin uk-icon uk-icon-image" style="background-image: url(./img/filter.png);"></a>
+				<a href="favorite" class="uk-margin uk-icon uk-icon-image" style="background-image: url(./img/favorite.png);"></a>
+				<a href="history" class="uk-margin uk-icon uk-icon-image" style="background-image: url(./img/history.png);"></a>
+				<a href="/?filter=random" class="uk-margin uk-icon uk-icon-image" style="background-image: url(./img/hot.png);"></a>
+			</div>
+		</aside>
+	
+		<main class="uk-width-expand">
+			<header class="uk-flex uk-child-width-expand">
+				<nav class="uk-navbar-container" uk-navbar>
+					
+					<div class="nav-overlay uk-navbar-left">
+						<a class="uk-navbar-toggle uk-hidden@m" uk-navbar-toggle-icon uk-toggle="target: offcanvas"></a>
+						<a class="uk-navbar-toggle uk-visible@m" id="asideMenu" uk-navbar-toggle-icon uk-toggle="target: #asideMenu; animation: uk-animation-fade" hidden></a>
+						<a class="uk-navbar-item uk-logo" id="logo" style="color:#222" href="/">
+							<strong class="uk-flex" id="title">18y<div style="color:tomato">Porn</div></strong> 
+						</a>
+					</div>
+
+					<div class="nav-overlay uk-navbar-right uk-padding-small uk-padding-remove-vertical">
+						<div class="uk-search uk-search-default uk-visible@m">
+							<a href="" class="uk-search-icon-flip" uk-search-icon></a>
+							<input id="txt_search" class="uk-search-input" type="search" placeholder="Search">
+						</div>
+						<a class="uk-navbar-toggle uk-hidden@m" uk-search-icon uk-toggle="target: .nav-overlay; animation: uk-animation-fade" href="#"></a>
+
+					</div>
+
+					<div class="nav-overlay uk-navbar-left uk-flex-1" hidden>
+
+						<div class="uk-navbar-item uk-width-expand">
+							<div class="uk-search uk-search-navbar uk-width-1-1">
+								<input id="txt_search" class="uk-search-input" type="search" placeholder="Search">
+							</div>
+						</div>
+
+						<a class="uk-navbar-toggle" uk-close uk-toggle="target: .nav-overlay; animation: uk-animation-fade" href="#"></a>
+
+					</div>
+				
+				</nav>
+			</header>
+		
+			<offcanvas id="offcanvas-overlay" uk-offcanvas="overlay: true">
+				<div class="uk-offcanvas-bar">
+					<button class="uk-offcanvas-close" type="button" uk-close></button>
+					<ul class="uk-list uk-list-divider">
+						<li>
+							<a class="uk-button uk-button-link uk-width-expand uk-inline" href="/">
+								<span class="uk-icon uk-icon-image uk-position-left" style="background-image: url(./img/start.png);"></span> 
+								home 
+							</a>
+						</li>
+						<li>
+							<a class="uk-button uk-button-link uk-width-expand uk-inline" href="/category">
+								<span class="uk-icon uk-icon-image uk-position-left" style="background-image: url(./img/filter.png);"></span> 
+								Categories
+							</a>
+						</li>
+						<li>
+							<a class="uk-button uk-button-link uk-width-expand uk-inline" href="favorite">
+								<span class="uk-icon uk-icon-image uk-position-left" style="background-image: url(./img/favorite.png);"></span> 
+								favorite
+							</a>
+						</li>
+						<li>
+							<a class="uk-button uk-button-link uk-width-expand uk-inline" href="history">
+								<span class="uk-icon uk-icon-image uk-position-left" style="background-image: url(./img/history.png);"></span> 
+								history
+							</a>
+						</li>
+						<li>
+							<a class="uk-button uk-button-link uk-width-expand uk-inline" href="/?filter=random">
+								<span class="uk-icon uk-icon-image uk-position-left" style="background-image: url(./img/hot.png);"></span> 
+								hot
+							</a>
+						</li>
+					</ul>
+				</div>
+			</offcanvas>
+			
+			<content class="uk-flex uk-flex-column uk-child-width-1-1">
+				<player class="uk-padding-small">
+					<video preload="auto" controls autoplay muted playsinline></video>
+				<player>
+				<article class="uk-flex uk-flex-wrap uk-child-width-1-3@m uk-child-width-1-2@s uk-child-width-1-1" id="videos"></article>
+				<spinner id="loading" class="uk-width-expand uk-padding uk-flex uk-flex-center uk-flex-middle" hidden >
+					<div uk-spinner="ratio: 3"></div>
+				</spinner>	
+				<a class="uk-button uk-button-default uk-width-expand" id="loadMore"> Load More </a>
+				<footer class="uk-section uk-section-muted">
+					<div class="uk-container">
+						<div class="uk-grid-match uk-child-width-1-3@s uk-text-justify" uk-grid>
+							<div>
+								<h1 style="color:#222" href="/">
+									<strong class="uk-flex" id="title">18y<div style="color:tomato">Porn</div></strong> 
+								</h1>
+							</div>
+							<div>
+								<p><strong>DISCLAIMER:</strong> Any references, names, logos, brands, and any other trademarks or images featured or referred to within the website are the property of their respective trademark holders. These trademark holders are not affiliated with 18yPorn.</p>
+							</div>
+							<div>
+								<ul class="uk-text-center uk-list">
+									<li><a>Contact Us<a></li>
+									<li><a>Privacy Policy<a></li>
+									<li><a>Terms Of Service<a></li>
+									<li><a>DMCA<a></li>
+									<li><a>18 USC 2257<a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</footer>
+			</content>
+		
+		</main>
+		
+	</body>	
+
+</html>
+
