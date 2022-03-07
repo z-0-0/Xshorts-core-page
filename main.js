@@ -135,7 +135,7 @@ http.createServer( (req, res)=>{
 				if( d.filter=='undefined' ){i++; 
 					if( i>d.start && i<d.end ) data.push(line);
 				} else if( d.filter=='random' ){
-					if( Math.random()>0.7 ){ i++; 
+					if( Math.random()>0.8 ){ i++; 
 						if( i>d.start && i<d.end ) data.push(line);
 					}
 				} else{ 
