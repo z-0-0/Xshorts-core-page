@@ -56,26 +56,34 @@ axios.get( 'https://store.externulls.com/webmasters/data.txt?days_back=10000&del
 
 */
 
+let file_list = new Array();
+
 const file = readline.createInterface({
 	input: fs.createReadStream('./data.txt'),
 //	output: process.stdout,
 	terminal: false
 });
 	
-	file.on('line', async(line) => {
-		try{
-			let data = line.replace(/'/g,'').split('|');
+file.on('line', line => {
+	try{
+		let data = line.replace(/'/g,'').split('|');
+
+		let video = {
+			id: data[0].slice(1),
+			name: data[2],
+			image: data[1].replace('https://','').split('?')[0],
+			duration: data[3],
+			category: data[4],
+			people: data[5],
+		};	//console.log( video );
 	
-			let video = {
-				id: data[0].slice(1),
-				name: data[2],
-				image: data[1].replace('https://','').split('?')[0],
-				duration: data[3],
-				category: data[4],
-				people: data[5],
-			};	//console.log( video );
-	
-			fs.promises.appendFile( './newdata',`${JSON.stringify(video)}\n` );
-			console.log('done');
-		} catch(e) {}
-	});
+		file_list.push(JSON.stringify(video));
+		console.log('done');
+	} catch(e) {}
+});
+
+file.on('close', ()=>{
+	file_list = file_list.sort( (a,b)=>{
+		return Math.random()>0.8;
+	}); fs.writeFileSync('./newdata',file_list.join('\n'));
+});	
