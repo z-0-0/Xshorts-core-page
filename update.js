@@ -7,7 +7,7 @@ const url = require('url');
 const fs = require('fs');
 
 //TODO: String Normalization ################################################ //
-//https://store.externulls.com/webmasters/data.txt?days_back=10000&delimiter=%27|%27&secondary_delimiter=%27,%27&thumbs_number=7&fields=id,thumbs,title,duration,tags,people&thumb_params=size=320x240
+//https://store.externulls.com/webmasters/data.txt?days_back=10000&delimiter=%27|%27&secondary_delimiter=%27,%27&thumbs_number=1&fields=id,thumbs,title,duration,tags,people&thumb_params=ratio=16x9
 /*
 axios.get( 'https://store.externulls.com/webmasters/data.txt?days_back=10000&delimiter=%27|%27&secondary_delimiter=%27,%27&thumbs_number=7&fields=id,thumbs,title,duration,tags,people&thumb_params=size=320x240',{ responseType: 'stream' } )
 .then( (response)=>{
@@ -84,6 +84,11 @@ file.on('line', line => {
 
 file.on('close', ()=>{
 	file_list = file_list.sort( (a,b)=>{
-		return Math.random()>0.8;
+		if( Math.random()>0.7 )
+			return 1;
+		else if( Math.random()<0.3 )
+			return -1;
+		else
+			return 0;
 	}); fs.writeFileSync('./newdata',file_list.join('\n'));
 });	
