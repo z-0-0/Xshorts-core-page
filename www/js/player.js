@@ -13,7 +13,8 @@ window.onload=()=>{
 		`;	
 		
 		query.set('filter',data.category[(Math.random()*data.category.length).toFixed(0)]);
-		query.set('search','random');		
+		query.set('search','random');
+		video.poster = data.image;		
 		loadVideos(); events(); 
 		
 		if (Hls.isSupported()) {
