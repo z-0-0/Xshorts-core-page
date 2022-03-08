@@ -23,6 +23,11 @@ iframe{
 	overflow:hidden; 
 	background-color: transparent; 
 }
+#menu{
+	mix-blend-mode: overlay;
+}	#menu:hover{
+	mix-blend-mode: initial;
+}
 *{
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
