@@ -32,6 +32,7 @@ getChunkList = async(start,end,filter=query.get('filter'))=>{
 }
 
 //TODO: LoadVideos XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
+// <div class="uk-position-center uk-light" uk-spinner="ratio:3" hidden></div>
 loadVideos = async()=>{
 	if( $('spinner').hidden ){
 		$('spinner').hidden = false;
@@ -44,7 +45,7 @@ loadVideos = async()=>{
 						<img class="uk-inline" src="${db.placeholder}" data-src="${video.image}"></img>
 						<div class="uk-padding-small uk-padding-remove-vertical uk-overlay-primary uk-position-bottom ">
 							${video.name.slice(0,30)}...
-						</div> <div class="uk-position-center uk-light" uk-spinner="ratio:3" hidden></div>
+						</div>
 					</div>
 					<video data-id="${video.id}" preload="auto" playsinline hidden muted loop autoplay></video>
 				</a>
@@ -60,7 +61,7 @@ viedeoEvents = ()=>{
 	$$('#video').forEach( item=>{
 		var child = item.children;		
 		item.onmouseenter = ()=>{
-			child[0].children[2].hidden = false;
+		//	child[0].children[2].hidden = false;
 			child[1].src=`/vp.externulls.com/new/480p/${child[1].dataset.id}.mp4`;
 			child[1].oncanplay = ()=>{
 				child[0].hidden = true; child[1].hidden = false;
@@ -69,7 +70,7 @@ viedeoEvents = ()=>{
 		
 		item.onmouseleave = ()=>{
 			child[1].src=``;
-			child[0].children[2].hidden = true;
+		//	child[0].children[2].hidden = true;
 			child[0].hidden = false; child[1].hidden = true;
 		}
 		

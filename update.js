@@ -40,8 +40,9 @@ axios.get( 'https://store.externulls.com/webmasters/data.txt?days_back=10000&del
 
 */
 
+//https://store.externulls.com/facts/tag?slug=index&limit=100000000&offset=0
 //https://store.externulls.com/facts/tag?id=27173&limit=100000000&offset=0
-axios.get( 'https://store.externulls.com/facts/tag?slug=index&limit=100000000&offset=0',{ responseType: 'json' } )
+axios.get( 'https://store.externulls.com/facts/tag?id=27173&limit=100000000&offset=0',{ responseType: 'json' } )
 .then( (response)=>{
 		
 	let file_list = new Array();
