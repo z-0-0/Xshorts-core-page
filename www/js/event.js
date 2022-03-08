@@ -10,6 +10,14 @@ const db = new Object();
 const query = new URLSearchParams(window.location.search);
 
 //TODO: lazyImage Fuction  XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
+badge = (list)=>{
+	let page = new String();
+	list.forEach( item=>{
+		page+=`<a class="uk-badge" href="/?filter=${item}">${item}</a>`;
+	});	return page;
+}
+
+//TODO: lazyImage Fuction  XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
 lazyImage = ()=>{
 	const config = { rootMargin: '250px 0px' };
 	var observer = new IntersectionObserver( (entries, observer)=>{
@@ -26,8 +34,8 @@ lazyImage = ()=>{
 
 
 //TODO: chunck Fuction XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
-getChunkList = async(start,end,filter=query.get('filter'))=>{ 
-	var request = await fetch(`${origin}/request?filter=${filter}&start=${start}&end=${start+end}`);
+getChunkList = async(start,end,filter=query.get('filter'),search=query.get('search'))=>{ 
+	var request = await fetch(`${origin}/request?filter=${filter}&search=${search}&start=${start}&end=${start+end}`);
 	return request.json();
 }
 

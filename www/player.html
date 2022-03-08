@@ -37,9 +37,9 @@
 			<div class="uk-padding-small uk-padding-remove-horizontal uk-light uk-child-width-expand aside uk-visible@m uk-height-1-1" style="background:#222;">
 				<a href="/" class="uk-margin uk-icon uk-icon-image" style="background-image: url(./img/start.png);"></a>
 				<a href="/category" class="uk-margin uk-icon uk-icon-image" style="background-image: url(./img/filter.png);"></a>
-				<a href="favorite" class="uk-margin uk-icon uk-icon-image" style="background-image: url(./img/favorite.png);"></a>
-				<a href="history" class="uk-margin uk-icon uk-icon-image" style="background-image: url(./img/history.png);"></a>
-				<a href="/?filter=random" class="uk-margin uk-icon uk-icon-image" style="background-image: url(./img/hot.png);"></a>
+				<a href="/favorite" class="uk-margin uk-icon uk-icon-image" style="background-image: url(./img/favorite.png);"></a>
+				<a href="/history" class="uk-margin uk-icon uk-icon-image" style="background-image: url(./img/history.png);"></a>
+				<a href="/?search=random" class="uk-margin uk-icon uk-icon-image" style="background-image: url(./img/hot.png);"></a>
 			</div>
 		</aside>
 	
@@ -96,19 +96,19 @@
 							</a>
 						</li>
 						<li>
-							<a class="uk-button uk-button-link uk-width-expand uk-inline" href="favorite">
+							<a class="uk-button uk-button-link uk-width-expand uk-inline" href="/favorite">
 								<span class="uk-icon uk-icon-image uk-position-left" style="background-image: url(./img/favorite.png);"></span> 
 								favorite
 							</a>
 						</li>
 						<li>
-							<a class="uk-button uk-button-link uk-width-expand uk-inline" href="history">
+							<a class="uk-button uk-button-link uk-width-expand uk-inline" href="/history">
 								<span class="uk-icon uk-icon-image uk-position-left" style="background-image: url(./img/history.png);"></span> 
 								history
 							</a>
 						</li>
 						<li>
-							<a class="uk-button uk-button-link uk-width-expand uk-inline" href="/?filter=random">
+							<a class="uk-button uk-button-link uk-width-expand uk-inline" href="/?search=random">
 								<span class="uk-icon uk-icon-image uk-position-left" style="background-image: url(./img/hot.png);"></span> 
 								hot
 							</a>
@@ -120,6 +120,7 @@
 			<content class="uk-flex uk-flex-column uk-child-width-1-1">
 				<player class="uk-padding-small uk-flex uk-flex-column">
 					<video preload="auto" controls autoplay muted playsinline></video>
+					<div id="info"></div>
 					<iframe data-aa='1953063' src='//acceptable.a-ads.com/1953063'></iframe>
 				</player>
 				<article class="uk-flex uk-flex-wrap uk-child-width-1-3@m uk-child-width-1-2@s uk-child-width-1-1" id="videos"></article>

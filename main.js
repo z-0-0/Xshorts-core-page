@@ -121,7 +121,7 @@ http.createServer( (req, res)=>{
 	//TODO: Server Conditions ############################################### //
 	else if( q.pathname == '/request' ){
 		
-		let data = new Array();
+		var data = new Array();
 		
 		const readInterface = readline.createInterface({
 			input: fs.createReadStream('./data'),
@@ -134,11 +134,7 @@ http.createServer( (req, res)=>{
 
 				if( d.filter=='undefined' ){i++; 
 					if( i>d.start && i<d.end ) data.push(line);
-				} else if( d.filter=='random' ){
-					if( Math.random()>0.8 ){ i++; 
-						if( i>d.start && i<d.end ) data.push(line);
-					}
-				} else{ 
+				} else { 
 					let index = slugify(line).search( slugify(d.filter) );
 					if( index>=0 ){ i++; 
 						if( i>d.start && i<d.end ) data.push(line);
@@ -149,8 +145,11 @@ http.createServer( (req, res)=>{
 		} catch(e) {}
 		
 		readInterface.on('close', (line)=>{
+			if( d.search=='random' ){
+				data = data.sort(() => Math.random()-0.5)
+			}
 			res.writeHead(200, header('text/plain'));
-			res.end( JSON.stringify(data) );
+			res.end( JSON.stringify(data.reverse()) );
 		});
 		
 	}
@@ -159,13 +158,30 @@ http.createServer( (req, res)=>{
 		axios.get(`https://store.externulls.com/facts/file/${d.id}`,{ responseType: 'json' })
 		.then( async(response)=>{
 			
+			let data = response.data;
+			let video = new Object();
+				
+			video.category = new Array();
+			video.id = data['fc_file_id'];
+			video.duration = data['file']['fl_duration'];
+			video.name = data['file']['stuff']['sf_name'];
+			video.creation = data['fc_facts'][0]['fc_created'];
+			video.thumbs = data['fc_facts'][0]['fc_thumbs'][0];
+			video.image = `/thumbs-015.externulls.com/videos/${video.id}/${video.thumbs}.jpg/to.webp?size=320x180`
+								
+			for( var i in data['tags'] ){
+				video.category.push( data['tags'][i]['tg_slug'] )			
+			}	
+			
 			if( response.data['fc_facts'][0]['hls_resources'] === undefined ){
-				res.writeHead(200, header('text/plain'));
-				res.end( JSON.stringify(response.data['file']['hls_resources']) );
+				video.hls = data['file']['hls_resources'];
 			} else {
 				res.writeHead(200, header('text/plain'));
-				res.end( JSON.stringify(response.data['fc_facts'][0]['hls_resources']) );
+				video.hls = data['fc_facts'][0]['hls_resources'];
 			}
+			
+			res.writeHead(200, header('text/plain'));
+			res.end( JSON.stringify(video) );
 			
 		});
 	}
