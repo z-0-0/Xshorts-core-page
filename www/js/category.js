@@ -6,13 +6,14 @@ loadVideos = async()=>{
 		var page = '';
 		
 		data.forEach( item=>{
-			console.log(item);
-		} )
-		
-		data.forEach( item=>{
 			page+=` <a href="/?filter=${item['tg_slug']}" class="uk-button uk-button-default"> ${item['tg_name']} </a> `;
 		});
+		
 		$('#videos').innerHTML = page;
+		
+		console.log( data.map( x=>{ return x['tg_name'] } ).join(',') )
+		
+		
 	}).catch(e=>console.log(e));
 }
 
