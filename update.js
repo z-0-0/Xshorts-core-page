@@ -66,12 +66,10 @@ axios.get( 'https://store.externulls.com/facts/tag?slug=index&limit=100000000&of
 		file_list.push(JSON.stringify(video));		
 	});
 	
-	/*
 	file_list = file_list.sort( (a,b)=>{
 		if( Math.random()>0.7 ) return 1;
 		else if( Math.random()<0.3 ) return -1;
 		else return 0;
 	}); fs.writeFileSync('./data',file_list.join('\n'));
-	*/ 
 	
 }).catch(e=>console.log(e));
