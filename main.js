@@ -69,14 +69,17 @@ const mimeType = {
 
 //TODO: header Functions XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX   //
 header = ( mimeType="text/plain" )=>{
-	return { 'Access-Control-Allow-Origin':'*', 'Content-Type':mimeType };
+	return { 
+	//	'Access-Control-Allow-Origin':'*',
+		'Content-Type':mimeType 
+	};
 }
 
 chunkheader = ( start,end,size,mimeType="text/plain" )=>{
 	const contentLength = end-start+1;
 	return {
 		"Content-Range":`bytes ${start}-${end}/${size}`,
-		'Access-Control-Allow-Origin':'*',
+	//	"Access-Control-Allow-Origin":"*",
 		"Content-Length":contentLength,
 		"Content-Type": mimeType,
 		"Accept-Ranges":"bytes",
