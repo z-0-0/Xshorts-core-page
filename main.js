@@ -124,7 +124,7 @@ http.createServer( (req, res)=>{
 		let data = new Array();
 		
 		const readInterface = readline.createInterface({
-			input: fs.createReadStream('./newdata'),
+			input: fs.createReadStream('./data'),
 		//	output: process.stdout,
 			console: false
 		});

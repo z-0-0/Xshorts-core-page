@@ -4,6 +4,11 @@ loadVideos = async()=>{
 	.then( async(response)=>{
 		var data = await response.json();
 		var page = '';
+		
+		data.forEach( item=>{
+			console.log(item);
+		} )
+		
 		data.forEach( item=>{
 			page+=` <a href="/?filter=${item['tg_slug']}" class="uk-button uk-button-default"> ${item['tg_name']} </a> `;
 		});
