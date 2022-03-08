@@ -239,30 +239,17 @@ http.createServer( (req, res)=>{
 		const keys = Object.keys(mimeType);
 		for( var i in keys ){
 			if( q.pathname.endsWith(keys[i]) ){
-				
 				const range = req.headers.range;
 				this.url = (`${path}${q.pathname}`).replace(/%20/g,' ');
-			
-				if(range){
-					const chuck_size = Math.pow( 10,6 ); 
-					const size = fs.statSync( this.url ).size;
-					const start = Number(range.replace(/\D/g,""));
-					const end = Math.min(chuck_size+start,size-1);
-
-					res.writeHead(206, chunkheader( start,end,size,mimeType[keys[i]] ));
-					const chuck = fs.createReadStream(this.url, {start,end});
-					chuck.pipe(res);
-					
-				} else {
-					fs.readFile( this.url, (err,data)=>{
-						if (err) {
-							res.writeHead(404, header('text/html'));
-							return res.end("404 File Not Exist"); 
-						}
-						res.writeHead(200, header( mimeType[keys[i]] ));
-						res.end( data );
-					});
-				}	return 0;		
+				
+				fs.readFile( this.url, (err,data)=>{
+					if (err) {
+						res.writeHead(404, header('text/html'));
+						return res.end("404 File Not Exist"); 
+					}
+					res.writeHead(200, header( mimeType[keys[i]] ));
+					res.end( data );
+				});	return 0;		
 			}
 		}	
 		
