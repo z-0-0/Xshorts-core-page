@@ -6,8 +6,8 @@ const http = require('http');
 const url = require('url');
 const fs = require('fs');
 
-const path = "./www";
-const port = process.env.PORT || 8888;
+const path = `${__dirname}/www`;
+const port = process.env.PORT || 3000;
 
 //TODO: String Normalization ################################################ //
 const slugify = str => { const map = {
@@ -70,7 +70,7 @@ const mimeType = {
 //TODO: header Functions XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX   //
 header = ( mimeType="text/plain" )=>{
 	return { 
-	//	'Access-Control-Allow-Origin':'*',
+		'Access-Control-Allow-Origin':'*',
 		'Content-Type':mimeType 
 	};
 }
@@ -79,7 +79,7 @@ chunkheader = ( start,end,size,mimeType="text/plain" )=>{
 	const contentLength = end-start+1;
 	return {
 		"Content-Range":`bytes ${start}-${end}/${size}`,
-	//	"Access-Control-Allow-Origin":"*",
+		"Access-Control-Allow-Origin":"*",
 		"Content-Length":contentLength,
 		"Content-Type": mimeType,
 		"Accept-Ranges":"bytes",
@@ -127,20 +127,18 @@ http.createServer( (req, res)=>{
 		var data = new Array();
 		
 		const readInterface = readline.createInterface({
-			input: fs.createReadStream('./data'),
-		//	output: process.stdout,
-			console: false
+			input: fs.createReadStream(`${__dirname}/data`),
 		});
 		
 		try{ let i=0;
 			readInterface.on('line', (line)=>{ 
-
+			
 				if( d.filter=='undefined' ){i++; 
-					if( i>d.start && i<d.end ) data.push(line);
+					if( d.start<i && i<d.end ) data.push(line);
 				} else { 
 					let index = slugify(line).search( slugify(d.filter) );
 					if( index>=0 ){ i++; 
-						if( i>d.start && i<d.end ) data.push(line);
+						if( d.start<i && i<d.end ) data.push(line);
 					}
 				}
 					
@@ -190,7 +188,7 @@ http.createServer( (req, res)=>{
 	}
 	
 	else if( q.pathname.startsWith("/thumbs") || q.pathname.startsWith("/vp.") 
-		  || q.pathname.endsWith(".ts") || q.pathname.startsWith("/store") ){		
+		  || q.pathname.endsWith(".ts") || q.pathname.startsWith("/store") ){
 		axios.get( `https:/${q.path}`,{ responseType: 'arraybuffer' } )
 		.then( async(response)=>{
 			res.writeHead(200, header('text/plain'));
@@ -199,12 +197,11 @@ http.createServer( (req, res)=>{
 	}
 	
 	else if( q.pathname.startsWith("/key") ){
-		axios.get( `https://video.beeg.com${q.pathname}` )
+		axios.get( `https://video.beeg.com${q.path}` )
 		.then( async(response)=>{
 				
 			let file = response.data.toString().split('\n');
 			let url = new Array();
-			let sec = 0;
 				
 			for( var i in file ){ 
 				if( file[i].startsWith('http') ){
@@ -225,14 +222,17 @@ http.createServer( (req, res)=>{
 					
 				}
 			}
-				
+			
+			let done=false; let seg = 0;
 			file = file.map( line=>{
-				if( !line.startsWith('#') ){
-					sec++; return `${url[0]}${url[1]}/seg-${sec}-v1-a1.ts`; 
-				} else return line;
+				if( !line.startsWith('#') && !done ){ seg++; 
+					return `${url[0]}${url[1]}/seg-${seg}-v1-a1.ts`; 
+				} else if( line.startsWith('#EXT-X-ENDLIST') )
+					done=true;
+				return line;
 			});
-				
-			res.writeHead(200, header('application/vnd.apple.mpegurl'));
+							
+			res.writeHead(200, header('text/plain'));
 			res.end( file.join('\n') );
 		});
 	}
@@ -252,13 +252,15 @@ http.createServer( (req, res)=>{
 					}
 					res.writeHead(200, header( mimeType[keys[i]] ));
 					res.end( data );
-				});	return 0;		
+				});	return 0
 			}
 		}	
 		
-		//res.writeHead(404, header('text/html'));
-		//res.end("404 File Not Found");
+		res.writeHead(404, header('text/html'));
+		res.end("404 File Not Found");
 	}	
 	
-}).listen(port); console.log(`server started at localhost:${port}`);
+}).listen(port,'0.0.0.0',()=>{
+	console.log(`server started at localhost:${port}`)
+});
 
