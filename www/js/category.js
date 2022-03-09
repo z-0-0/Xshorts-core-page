@@ -9,10 +9,8 @@ loadVideos = async()=>{
 			page+=` <a href="/?filter=${item['tg_slug']}" class="uk-button uk-button-default"> ${item['tg_name']} </a> `;
 		});
 		
-		$('#videos').innerHTML = page;
-		
-		console.log( data.map( x=>{ return x['tg_name'] } ).join(',') )
-		
+		//console.log( page );
+		//$('#videos').innerHTML = page;		
 		
 	}).catch(e=>console.log(e));
 }
