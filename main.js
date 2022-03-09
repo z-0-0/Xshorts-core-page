@@ -54,8 +54,10 @@ const mimeType = {
     "css" : "text/css",
     "csv" : "text/csv",
     "html": "text/html",
+    "txt" : "text/plain",
     "text": "text/plain",
     "js"  : "text/javascript",
+    "xml" : "application/xml",
     
     "zip" : "application/zip",
     "pdf" : "application/pdf",
