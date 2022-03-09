@@ -11,17 +11,17 @@ window.onload=()=>{
 		`;	
 		
 		$('video').innerHTML = `
-			<source src="/${data.hls['fl_cdn_240']}" type="application/x-mpegURL" size="240">
-			<source src="/${data.hls['fl_cdn_480']}" type="application/x-mpegURL" size="480">
-			<source src="/${data.hls['fl_cdn_720']}" type="application/x-mpegURL" size="720">
-			<source src="/${data.hls['fl_cdn_1080']}" type="application/x-mpegURL" size="1080">
+			<source src="/${data.hls['fl_cdn_240']}" type="application/x-mpegURL" title="240p">
+			<source src="/${data.hls['fl_cdn_480']}" type="application/x-mpegURL" title="480p">
+			<source src="/${data.hls['fl_cdn_720']}" type="application/x-mpegURL" title="720p">
+			<source src="/${data.hls['fl_cdn_1080']}" type="application/x-mpegURL" title="1080p">
 		`;	
 		
 		query.set('filter',data.category[(Math.random()*data.category.length).toFixed(0)]);
 		query.set('search','random');
 		$('video').poster = data.image;		
 		loadVideos(); events(); 
-		
+
 		if (Hls.isSupported()) {
 			var hls = new Hls();
 				hls.loadSource( `/${data.hls['fl_cdn_240']}` );
