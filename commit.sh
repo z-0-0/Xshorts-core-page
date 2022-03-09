@@ -10,7 +10,7 @@ git push heroku master
 '
 
 ' ##### Github Commit ##### '
-TOKEN="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"
+TOKEN="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"
 USERNAME="Bececrazy"
 REPO="18yPorn"
 
