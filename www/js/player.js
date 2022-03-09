@@ -3,27 +3,32 @@ window.onload=()=>{
 	fetch(`/hls?id=${query.get('id')}`)
 	.then( async(response)=>{
 		
-		var data = await response.json();		
-		var videoSrc = `/${data.hls['fl_cdn_480']}`;
-		var video = $('video');
+		var data = await response.json();
 		
 		$('#info').innerHTML = `
 			<p class="uk-text-bold uk-text-lead uk-text-truncate"> ${data.name} </p>
 			<div> <strong>Tags:</strong> ${ badge(data.category) }</div>
 		`;	
 		
+		$('video').innerHTML = `
+			<source src="/${data.hls['fl_cdn_240']}" type="application/x-mpegURL" size="240">
+			<source src="/${data.hls['fl_cdn_480']}" type="application/x-mpegURL" size="480">
+			<source src="/${data.hls['fl_cdn_720']}" type="application/x-mpegURL" size="720">
+			<source src="/${data.hls['fl_cdn_1080']}" type="application/x-mpegURL" size="1080">
+		`;	
+		
 		query.set('filter',data.category[(Math.random()*data.category.length).toFixed(0)]);
 		query.set('search','random');
-		video.poster = data.image;		
+		$('video').poster = data.image;		
 		loadVideos(); events(); 
 		
 		if (Hls.isSupported()) {
 			var hls = new Hls();
-				hls.loadSource(videoSrc);
-				hls.attachMedia(video);
+				hls.loadSource( `/${data.hls['fl_cdn_240']}` );
+				hls.attachMedia( $('video') );
 		} else if (video.canPlayType('application/vnd.apple.mpegurl'))
-			video.src = videoSrc;
-		
+			$('video').src = `/${data.hls['fl_cdn_240']}`;
+			
 	}).catch( err=>console.log(err) );
 	
 }
