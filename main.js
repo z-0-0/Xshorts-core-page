@@ -123,6 +123,53 @@ http.createServer( (req, res)=>{
 		});
 	}
 	
+	
+	else if( q.pathname=="/contact-us" ){
+		fs.readFile(`${path}/contact-us.html`, (err,data)=>{
+			if (err) {
+				res.writeHead(404, header('text/html'));
+				return res.end("404 Not Found"); }
+			res.writeHead(200,header('text/html'));
+			res.write(data); res.end();
+		});
+	}
+	else if( q.pathname=="/privacy-policy" ){
+		fs.readFile(`${path}/privacy-policy.html`, (err,data)=>{
+			if (err) {
+				res.writeHead(404, header('text/html'));
+				return res.end("404 Not Found"); }
+			res.writeHead(200,header('text/html'));
+			res.write(data); res.end();
+		});
+	}
+	else if( q.pathname=="/term-of-service" ){
+		fs.readFile(`${path}/term-of-service.html`, (err,data)=>{
+			if (err) {
+				res.writeHead(404, header('text/html'));
+				return res.end("404 Not Found"); }
+			res.writeHead(200,header('text/html'));
+			res.write(data); res.end();
+		});
+	}
+	else if( q.pathname=="/dcma" ){
+		fs.readFile(`${path}/dcma.html`, (err,data)=>{
+			if (err) {
+				res.writeHead(404, header('text/html'));
+				return res.end("404 Not Found"); }
+			res.writeHead(200,header('text/html'));
+			res.write(data); res.end();
+		});
+	}
+	else if( q.pathname=="/18-usc-2257" ){
+		fs.readFile(`${path}/18-usc-2257.html`, (err,data)=>{
+			if (err) {
+				res.writeHead(404, header('text/html'));
+				return res.end("404 Not Found"); }
+			res.writeHead(200,header('text/html'));
+			res.write(data); res.end();
+		});
+	}
+	
 	//TODO: Server Conditions ############################################### //
 	else if( q.pathname == '/request' ){
 		
