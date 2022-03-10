@@ -50,7 +50,7 @@ loadVideos = async()=>{
 			$('#videos').innerHTML += ` 
 				<a href="./play?id=${video.id}" class="uk-padding-small uk-child-width-expand" id="video">
 					<div class="uk-inline uk-flex uk-child-width-expand" id="videoData">
-						<img class="uk-inline" src="${db.placeholder}" data-src="${video.image}" alt="${video.name}"></img>
+						<img class="uk-inline" src="${db.placeholder}" data-src="${video.image}" alt="${video.name}" id="image"></img>
 						<div class="uk-padding-small uk-padding-remove-vertical uk-overlay-primary uk-position-bottom ">
 							${video.name.slice(0,30)}...
 						</div>

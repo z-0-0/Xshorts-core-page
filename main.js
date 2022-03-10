@@ -90,6 +90,11 @@ chunkheader = ( start,end,size,mimeType="text/plain" )=>{
 	};
 }
 
+//TODO: 404 Page Error XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
+_404_ = ()=>{
+	return fs.readFileSync(`${path}/404.html`);
+}
+
 //TODO: Server Started ###################################################### //
 http.createServer( (req, res)=>{ 
 	
@@ -101,7 +106,7 @@ http.createServer( (req, res)=>{
 		fs.readFile(`${path}/index.html`, (err,data)=>{
 			if (err) {
 				res.writeHead(404, header('text/html'));
-				return res.end("404 Not Found"); }
+				return res.end( _404_() ); }
 			res.writeHead(200,header('text/html'));
 			res.write(data); res.end();
 		});
@@ -110,16 +115,16 @@ http.createServer( (req, res)=>{
 		fs.readFile(`${path}/category.html`, (err,data)=>{
 			if (err) {
 				res.writeHead(404, header('text/html'));
-				return res.end("404 Not Found"); }
+				return res.end( _404_() ); }
 			res.writeHead(200,header('text/html'));
 			res.write(data); res.end();
 		});
 	}
 	else if( q.pathname=="/play" ){
 		fs.readFile(`${path}/player.html`, (err,data)=>{
-			if (err) {
+			if (err) { 
 				res.writeHead(404, header('text/html'));
-				return res.end("404 Not Found"); }
+				return res.end( _404_() ); }
 			res.writeHead(200,header('text/html'));
 			res.write(data); res.end();
 		});
@@ -130,7 +135,7 @@ http.createServer( (req, res)=>{
 		fs.readFile(`${path}/contact-us.html`, (err,data)=>{
 			if (err) {
 				res.writeHead(404, header('text/html'));
-				return res.end("404 Not Found"); }
+				return res.end( _404_() ); }
 			res.writeHead(200,header('text/html'));
 			res.write(data); res.end();
 		});
@@ -139,7 +144,7 @@ http.createServer( (req, res)=>{
 		fs.readFile(`${path}/privacy-policy.html`, (err,data)=>{
 			if (err) {
 				res.writeHead(404, header('text/html'));
-				return res.end("404 Not Found"); }
+				return res.end( _404_() ); }
 			res.writeHead(200,header('text/html'));
 			res.write(data); res.end();
 		});
@@ -148,7 +153,7 @@ http.createServer( (req, res)=>{
 		fs.readFile(`${path}/term-of-service.html`, (err,data)=>{
 			if (err) {
 				res.writeHead(404, header('text/html'));
-				return res.end("404 Not Found"); }
+				return res.end( _404_() ); }
 			res.writeHead(200,header('text/html'));
 			res.write(data); res.end();
 		});
@@ -157,7 +162,7 @@ http.createServer( (req, res)=>{
 		fs.readFile(`${path}/dcma.html`, (err,data)=>{
 			if (err) {
 				res.writeHead(404, header('text/html'));
-				return res.end("404 Not Found"); }
+				return res.end( _404_() ); }
 			res.writeHead(200,header('text/html'));
 			res.write(data); res.end();
 		});
@@ -166,7 +171,7 @@ http.createServer( (req, res)=>{
 		fs.readFile(`${path}/18-usc-2257.html`, (err,data)=>{
 			if (err) {
 				res.writeHead(404, header('text/html'));
-				return res.end("404 Not Found"); }
+				return res.end( _404_() ); }
 			res.writeHead(200,header('text/html'));
 			res.write(data); res.end();
 		});
@@ -299,7 +304,7 @@ http.createServer( (req, res)=>{
 				fs.readFile( this.url, (err,data)=>{
 					if (err) {
 						res.writeHead(404, header('text/html'));
-						return res.end("404 File Not Exist"); 
+						return res.end( _404_() ); 
 					}
 					res.writeHead(200, header( mimeType[keys[i]] ));
 					res.end( data );
@@ -308,7 +313,7 @@ http.createServer( (req, res)=>{
 		}	
 		
 		res.writeHead(404, header('text/html'));
-		res.end("404 File Not Found");
+		res.end( _404_() );
 	}	
 	
 }).listen(port,'0.0.0.0',()=>{

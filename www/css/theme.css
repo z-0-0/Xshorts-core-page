@@ -5,6 +5,9 @@ content{
 	max-height: 90vh!important;	
 	overflow:auto; 
 }
+color{
+	background:tomato;
+}
 img{
 	width:300px;
 	height:200px;
