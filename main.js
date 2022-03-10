@@ -73,7 +73,7 @@ const mimeType = {
 header = ( mimeType="text/plain" )=>{
 	return { 
 		'Access-Control-Allow-Origin':'*',
-		'cache-control': 'public, max-age=533280',
+		'cache-control': 'public, max-age=533',
 		'Content-Type':mimeType 
 	};
 }
@@ -82,7 +82,7 @@ chunkheader = ( start,end,size,mimeType="text/plain" )=>{
 	const contentLength = end-start+1;
 	return {
 		"Content-Range":`bytes ${start}-${end}/${size}`,
-		'cache-control': 'public, max-age=533280',
+		'cache-control': 'public, max-age=533',
 		"Access-Control-Allow-Origin":"*",
 		"Content-Length":contentLength,
 		"Content-Type": mimeType,

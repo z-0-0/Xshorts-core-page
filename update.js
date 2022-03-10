@@ -6,27 +6,12 @@ const http = require('http');
 const url = require('url');
 const fs = require('fs');
 
-//TODO: String Normalization ################################################ //
-const slugify = str => { const map = {
-    'c' : 'ç|Ç','n' : 'ñ|Ñ',
-   	'e' : 'é|è|ê|ë|É|È|Ê|Ë',
-   	'i' : 'í|ì|î|ï|Í|Ì|Î|Ï',
-   	'u' : 'ú|ù|û|ü|Ú|Ù|Û|Ü',
-   	'o' : 'ó|ò|ô|õ|ö|Ó|Ò|Ô|Õ|Ö',
-   	'a' : 'á|à|ã|â|ä|À|Á|Ã|Â|Ä',
-	''	: ` |:|_|!|¡|¿|\\?|#|/|,|-|'|"|’`,
-};	for (var pattern in map) { 
-		str=str.replace( new RegExp(map[pattern],'g' ), pattern); 
-	}	return str.toLowerCase();
-}
+var file_list = new Array();
 
-/*
-//https://store.externulls.com/facts/tag?slug=index&limit=100000000&offset=0
-//https://store.externulls.com/facts/tag?id=27173&limit=100000000&offset=0
-axios.get( 'https://store.externulls.com/facts/tag?slug=index&limit=100&offset=0',{ responseType: 'json' } )
-.then( async(response)=>{
-		
-	let file_list = new Array();
+getHot = async()=>{
+	//https://store.externulls.com/facts/tag?slug=index&limit=100000000&offset=0
+	//https://store.externulls.com/facts/tag?id=27173&limit=100000000&offset=0
+	let response = await axios.get( 'https://store.externulls.com/facts/tag?slug=index&limit=100000&offset=0',{ responseType: 'json' } )
 	
 	for( var i in response.data ){
 		let data = response.data[i];
@@ -41,35 +26,31 @@ axios.get( 'https://store.externulls.com/facts/tag?slug=index&limit=100&offset=0
 		video.image = `/thumbs-015.externulls.com/videos/${video.id}/${video.thumbs}.jpg/to.webp?size=320x180`
 		
 		data.tags.map( x=>{
-			video.category.push( slugify(x['tg_slug']) );
 			video.category.push( x['id'].toString() );
+			video.category.push( x['tg_slug'] );
+			video.category.push( 'hot' );
 		});	file_list.push(JSON.stringify(video));
 		
 		console.log( `done: ${i}/${response.data.length}` );
-	}
+	}//	file_list = file_list.sort(() => Math.random()-0.5)
 	
-//	file_list = file_list.sort(() => Math.random()-0.5)
-	fs.writeFileSync('./data',file_list.join('\n'));
+};
 
-}).catch(e=>console.log(e));
-*/
+getDB = async()=>{ getHot();
 
-axios.get( 'https://store.externulls.com/webmasters/data.txt?days_back=100000&delimiter=%27|%27&secondary_delimiter=%27,%27&thumbs_number=1&fields=duration,date,id,title,thumbs,brand,people,tags&thumb_params=ratio=16x9',{ responseType: 'stream' } )
-.then( response=>{
-		
-	let i=0;
-	let file_list = new Array();
+	let response = await axios.get( 'https://store.externulls.com/webmasters/data.txt?days_back=100000&delimiter=%27|%27&secondary_delimiter=%27,%27&thumbs_number=1&fields=duration,date,id,title,thumbs,brand,people,tags&thumb_params=ratio=16x9',{ responseType: 'stream' } )
 	
 	var lineReader = readline.createInterface({
 		input: response.data,
 		debug: 'false'
 	});
 
+	var prev_name = ''; let i=0;
 	lineReader.on('line', (line)=>{ i++;
 		let data = line.replace(/'/g,'').split('|');
 		let video = new Object();
-		
-		try{
+	
+		try{		
 			video.name = data[3];
 			video.duration = data[0];
 			video.creation = data[1];
@@ -77,10 +58,14 @@ axios.get( 'https://store.externulls.com/webmasters/data.txt?days_back=100000&de
 			video.image = data[4].replace('https:/','');
 			video.category = (`${data[5]},${data[6]},${data[7]}`).split(',');
 		
-			file_list.push(JSON.stringify(video));
-		//	lineReader.close();
-		} catch(e) { console.log(e,line); }
+			if( video.name != prev_name )
+				file_list.push(JSON.stringify(video));
 		
+			prev_name = video.name;
+		//	lineReader.close();
+	
+		} catch(e) { console.log(e,line); }
+	
 	});
 	
 	lineReader.on('close',()=>{
@@ -88,4 +73,6 @@ axios.get( 'https://store.externulls.com/webmasters/data.txt?days_back=100000&de
 		fs.writeFileSync('./data',file_list.join('\n'));
 	});
 
-}).catch(e=>console.log(e));
+};	getDB();
+
+
