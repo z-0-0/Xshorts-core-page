@@ -54,7 +54,7 @@ axios.get( 'https://store.externulls.com/facts/tag?slug=index&limit=100&offset=0
 }).catch(e=>console.log(e));
 */
 
-axios.get( 'https://store.externulls.com/webmasters/data.txt?days_back=500000&delimiter=%27|%27&secondary_delimiter=%27,%27&thumbs_number=1&fields=duration,date,id,title,thumbs,brand,people,tags&thumb_params=ratio=16x9',{ responseType: 'stream' } )
+axios.get( 'https://store.externulls.com/webmasters/data.txt?days_back=100000&delimiter=%27|%27&secondary_delimiter=%27,%27&thumbs_number=1&fields=duration,date,id,title,thumbs,brand,people,tags&thumb_params=ratio=16x9',{ responseType: 'stream' } )
 .then( response=>{
 		
 	let i=0;

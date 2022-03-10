@@ -18,7 +18,7 @@ video{
 	background-color: #222;
 }
 #menu{
-	mix-blend-mode: overlay;
+	mix-blend-mode: soft-light;
 }	#menu:hover{
 	mix-blend-mode: initial;
 }
