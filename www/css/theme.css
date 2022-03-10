@@ -25,6 +25,21 @@ video{
 }	#menu:hover{
 	mix-blend-mode: initial;
 }
+.uk-red-badge{
+	color: tomato;
+    text-decoration: none;
+    border-color: tomato;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 1px;
+    cursor: pointer;
+    padding: 0px 3px;
+}
+.uk-red-badge:hover{
+	background-color: tomato;
+    text-decoration: none;
+    color: white;
+}
 /*
 *{
   -webkit-touch-callout: none;

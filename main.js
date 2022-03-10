@@ -91,9 +91,7 @@ chunkheader = ( start,end,size,mimeType="text/plain" )=>{
 }
 
 //TODO: 404 Page Error XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
-_404_ = ()=>{
-	return fs.readFileSync(`${path}/404.html`);
-}
+_404_ = ()=>{ return fs.readFileSync(`${path}/404.html`); }
 
 //TODO: Server Started ###################################################### //
 http.createServer( (req, res)=>{ 
@@ -111,70 +109,10 @@ http.createServer( (req, res)=>{
 			res.write(data); res.end();
 		});
 	}
-	else if( q.pathname=="/category" ){
-		fs.readFile(`${path}/category.html`, (err,data)=>{
-			if (err) {
-				res.writeHead(404, header('text/html'));
-				return res.end( _404_() ); }
-			res.writeHead(200,header('text/html'));
-			res.write(data); res.end();
-		});
-	}
-	else if( q.pathname=="/play" ){
-		fs.readFile(`${path}/player.html`, (err,data)=>{
-			if (err) { 
-				res.writeHead(404, header('text/html'));
-				return res.end( _404_() ); }
-			res.writeHead(200,header('text/html'));
-			res.write(data); res.end();
-		});
-	}
-	
-	
-	else if( q.pathname=="/contact-us" ){
-		fs.readFile(`${path}/contact-us.html`, (err,data)=>{
-			if (err) {
-				res.writeHead(404, header('text/html'));
-				return res.end( _404_() ); }
-			res.writeHead(200,header('text/html'));
-			res.write(data); res.end();
-		});
-	}
-	else if( q.pathname=="/privacy-policy" ){
-		fs.readFile(`${path}/privacy-policy.html`, (err,data)=>{
-			if (err) {
-				res.writeHead(404, header('text/html'));
-				return res.end( _404_() ); }
-			res.writeHead(200,header('text/html'));
-			res.write(data); res.end();
-		});
-	}
-	else if( q.pathname=="/term-of-service" ){
-		fs.readFile(`${path}/term-of-service.html`, (err,data)=>{
-			if (err) {
-				res.writeHead(404, header('text/html'));
-				return res.end( _404_() ); }
-			res.writeHead(200,header('text/html'));
-			res.write(data); res.end();
-		});
-	}
-	else if( q.pathname=="/dcma" ){
-		fs.readFile(`${path}/dcma.html`, (err,data)=>{
-			if (err) {
-				res.writeHead(404, header('text/html'));
-				return res.end( _404_() ); }
-			res.writeHead(200,header('text/html'));
-			res.write(data); res.end();
-		});
-	}
-	else if( q.pathname=="/18-usc-2257" ){
-		fs.readFile(`${path}/18-usc-2257.html`, (err,data)=>{
-			if (err) {
-				res.writeHead(404, header('text/html'));
-				return res.end( _404_() ); }
-			res.writeHead(200,header('text/html'));
-			res.write(data); res.end();
-		});
+	else if( fs.existsSync(`${path}${q.pathname}.html`) ){
+		let data = fs.readFileSync(`${path}${q.pathname}.html`);
+		res.writeHead(200,header('text/html'));
+		res.end(data);
 	}
 	
 	//TODO: Server Conditions ############################################### //
@@ -303,16 +241,14 @@ http.createServer( (req, res)=>{
 				const range = req.headers.range;
 				this.url = (`${path}${q.pathname}`).replace(/%20/g,' ');
 				
-				fs.readFile( this.url, (err,data)=>{
-					if (err) {
-						res.writeHead(404, header('text/html'));
-						return res.end( _404_() ); 
-					}
+				if( fs.existsSync(this.url) ){
+					let data = fs.readFileSync(this.url);
 					res.writeHead(200, header( mimeType[keys[i]] ));
-					res.end( data );
-				});	return 0
+					return res.end( data );
+				}
+				
 			}
-		}	
+		}
 		
 		res.writeHead(404, header('text/html'));
 		res.end( _404_() );

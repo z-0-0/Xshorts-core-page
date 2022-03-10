@@ -7,7 +7,7 @@ window.onload=()=>{
 		
 		$('#info').innerHTML = `
 			<p class="uk-text-bold uk-text-lead uk-text-truncate"> ${data.name} </p>
-			<div> <strong>Tags:</strong> ${ badge(data.category) }</div>
+			<div class="uk-flex uk-flex-wrap"> <strong>Tags:</strong> ${ badge(data.category) }</div>
 		`;	
 		
 		$('video').innerHTML = `
