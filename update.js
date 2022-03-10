@@ -60,12 +60,12 @@ axios.get( 'https://store.externulls.com/webmasters/data.txt?days_back=100000&de
 	let i=0;
 	let file_list = new Array();
 	
-	var lineaReader = readline.createInterface({
+	var lineReader = readline.createInterface({
 		input: response.data,
 		debug: 'false'
 	});
 
-	lineaReader.on('line', (line)=>{ i++;
+	lineReader.on('line', (line)=>{ i++;
 		let data = line.replace(/'/g,'').split('|');
 		let video = new Object();
 		
@@ -78,11 +78,12 @@ axios.get( 'https://store.externulls.com/webmasters/data.txt?days_back=100000&de
 			video.category = (`${data[5]},${data[6]},${data[7]}`).split(',');
 		
 			file_list.push(JSON.stringify(video));
+		//	lineReader.close();
 		} catch(e) { console.log(e,line); }
 		
 	});
 	
-	lineaReader.on('close',()=>{
+	lineReader.on('close',()=>{
 	//	file_list = file_list.sort(() => Math.random()-0.5)
 		fs.writeFileSync('./data',file_list.join('\n'));
 	});

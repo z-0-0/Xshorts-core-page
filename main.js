@@ -189,6 +189,8 @@ http.createServer( (req, res)=>{
 		try{ let i=0;
 			readInterface.on('line', (line)=>{ 
 			
+				if( i>d.end ) readInterface.close();
+			
 				if( d.filter=='undefined' ){i++; 
 					if( d.start<i && i<d.end ) data.push(line);
 				} else { 
