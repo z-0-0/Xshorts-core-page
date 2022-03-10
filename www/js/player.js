@@ -24,10 +24,10 @@ window.onload=()=>{
 
 		if (Hls.isSupported()) {
 			var hls = new Hls();
-				hls.loadSource( `/${data.hls['fl_cdn_240']}` );
+				hls.loadSource( `/${data.hls['fl_cdn_480']}` );
 				hls.attachMedia( $('video') );
 		} else if (video.canPlayType('application/vnd.apple.mpegurl'))
-			$('video').src = `/${data.hls['fl_cdn_240']}`;
+			$('video').src = `/${data.hls['fl_cdn_480']}`;
 			
 	}).catch( err=>console.log(err) );
 	
