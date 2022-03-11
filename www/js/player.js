@@ -10,14 +10,6 @@ window.onload=()=>{
 			<div class="uk-flex uk-flex-wrap"> <strong>Tags:</strong> ${ badge(data.category) }</div>
 		`;
 		
-		$('video').innerHTML = `
-			<source src="/${data.hls['fl_cdn_240']}" title="240p">
-			<source src="/${data.hls['fl_cdn_480']}" title="480p">
-			<source src="/${data.hls['fl_cdn_720']}" title="720p">
-			<source src="/${data.hls['fl_cdn_1080']}" title="1080p">
-			<p> oops, video not found </p>
-		`;	
-		
 		query.set('filter',data.category[(Math.random()*data.category.length).toFixed(0)]);
 		query.set('search','random');
 		$('video').poster = data.image;		
