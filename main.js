@@ -121,6 +121,14 @@ router = (req,res)=>{
 	
 	var q = url.parse(req.url, true);
 	var d = q.query;
+	
+	console.log( req )
+	//TODO: redirect Pages ################################################## //
+	if( req.url.startsWith('http:') ){
+		console.log('redirected')
+		res.writeHead(301, {'Location': `https:/18yporn.ml${q.path}`});
+		return res.end();
+	}
 			
 	//TODO: Server Pages #################################################### //
 	if( q.pathname=="/" ){
@@ -279,14 +287,15 @@ router = (req,res)=>{
 	
 }
 
+
 /*
-server = http2.createSecureServer( getSecureKey(),router )
+http2.createSecureServer( getSecureKey(),router )
 .listen(port,'0.0.0.0',()=>{
 	console.log(`started at http://localhost:${port}`)
 });
 */
 
-http1.createServer( redirect )
-.listen(4000,'0.0.0.0',()=>{
+http1.createServer( router )
+.listen(port,'0.0.0.0',()=>{
 	console.log(`started at http://localhost:${port}`)
 });
