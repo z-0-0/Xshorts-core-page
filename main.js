@@ -90,14 +90,6 @@ chunkheader = ( start,end,size,mimeType="text/plain" )=>{
 	};
 }
 
-//TODO: Secure Key XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX //
-getSecureKey = ()=>{
-	return {
-	 	key: fs.readFileSync('./key/key.pem'),
-	  	cert: fs.readFileSync('./key/cert.pem')
-	}
-}
-
 //TODO: 404 Page Error XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
 _404_ = ()=>{ 
 	let url = `${path}/404.html`
@@ -140,7 +132,7 @@ router = (req,res)=>{
 		try{ let i=0;
 			readInterface.on('line', (line)=>{ 
 			
-			//	if( i>d.end ) readInterface.close();
+				if( i>d.end ) readInterface.close();
 			
 				if( d.filter=='undefined' ){i++; 
 					if( d.start<i && i<d.end ) data.push(line);

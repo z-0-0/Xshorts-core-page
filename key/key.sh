@@ -1,1 +1,0 @@
-openssl req -x509 -newkey rsa:2048 -nodes -sha256 -subj '/CN=localhost' -keyout "./key/localhost-privkey.pem" -out "./key/localhost-cert.pem"
