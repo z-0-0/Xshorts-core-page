@@ -53,7 +53,7 @@ const mimeType = {
     
     "css" : "text/css",
     "csv" : "text/csv",
-    "html": "text/html",
+//  "html": "text/html",
     "txt" : "text/plain",
     "text": "text/plain",
     "js"  : "text/javascript",
