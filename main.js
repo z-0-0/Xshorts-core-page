@@ -72,8 +72,9 @@ const mimeType = {
 //TODO: header Functions XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX   //
 header = ( mimeType="text/plain" )=>{
 	return { 
+		'Content-Security-Policy-Reporn-Only': "default-src 'self'; font-src 'self'; img-src 'self'; frame-src 'self';",
+		'Strict-Transport-Security': 'max-age=31536000; preload',
 	//	'cache-control': 'public, max-age=533',
-		'Content-Security-Policy': "default-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self';",
 		'Access-Control-Allow-Origin':'*',
 		'Content-Type':mimeType 
 	};
@@ -82,7 +83,7 @@ header = ( mimeType="text/plain" )=>{
 chunkheader = ( start,end,size,mimeType="text/plain" )=>{
 	const contentLength = end-start+1;
 	return {
-		'Content-Security-Policy': "default-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self';",
+		'Content-Security-Policy-Reporn-Only': "default-src 'self'; font-src 'self'; img-src 'self'; frame-src 'self';",
 		"Content-Range":`bytes ${start}-${end}/${size}`,
 	//	'cache-control': 'public, max-age=533',
 		"Access-Control-Allow-Origin":"*",
