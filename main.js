@@ -73,6 +73,7 @@ const mimeType = {
 header = ( mimeType="text/plain" )=>{
 	return { 
 	//	'cache-control': 'public, max-age=533',
+		'Content-Security-Policy': "default-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self';",
 		'Access-Control-Allow-Origin':'*',
 		'Content-Type':mimeType 
 	};
@@ -81,6 +82,7 @@ header = ( mimeType="text/plain" )=>{
 chunkheader = ( start,end,size,mimeType="text/plain" )=>{
 	const contentLength = end-start+1;
 	return {
+		'Content-Security-Policy': "default-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self';",
 		"Content-Range":`bytes ${start}-${end}/${size}`,
 	//	'cache-control': 'public, max-age=533',
 		"Access-Control-Allow-Origin":"*",
