@@ -110,11 +110,8 @@ router = (req,res)=>{
 	
 	//TODO: Redirect Pages ################################################## //
 	try{
-		if(req.headers['X-Forwarded-Proto'].indexOf("https")!=-1){
-			return next()
-		} else {
+		if(req.headers['X-Forwarded-Proto'].indexOf("https")<0)
 			res.redirect('https://' + req.hostname + req.url);
-		}
 	} catch(e){ }
 				
 	//TODO: Server Pages #################################################### //
