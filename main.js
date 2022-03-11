@@ -2,8 +2,7 @@
 
 const readline = require('readline');
 const axios = require('axios');
-const http2 = require('http2');
-const http1 = require('http');
+const http = require('http2');
 const url = require('url');
 const fs = require('fs');
 
@@ -108,28 +107,11 @@ _404_ = ()=>{
 }
 
 //TODO: Server Started ###################################################### //
-redirect = (req,res)=>{
-	
-	var q = url.parse(req.url, true);
-	var d = q.query;
-	
-	res.writeHead(301, {'Location': `https:/18yporn.ml${q.path}`});
-	res.end();
-}
-
 router = (req,res)=>{ 
 	
 	var q = url.parse(req.url, true);
 	var d = q.query;
-	
-	console.log( req.headers )
-	//TODO: redirect Pages ################################################## //
-	if( req.url.startsWith('http:') ){
-		console.log('redirected')
-		res.writeHead(301, {'Location': `https:/18yporn.ml${q.path}`});
-		return res.end();
-	}
-			
+				
 	//TODO: Server Pages #################################################### //
 	if( q.pathname=="/" ){
 		fs.readFile(`${path}/index.html`, (err,data)=>{
@@ -287,15 +269,7 @@ router = (req,res)=>{
 	
 }
 
-
-/*
-http2.createSecureServer( getSecureKey(),router )
-.listen(port,'0.0.0.0',()=>{
-	console.log(`started at http://localhost:${port}`)
-});
-*/
-
-http1.createServer( router )
+http.createSecureServer( getSecureKey(),router )
 .listen(port,'0.0.0.0',()=>{
 	console.log(`started at http://localhost:${port}`)
 });
