@@ -29,7 +29,10 @@ getHot = async()=>{
 		});	file_list.push(JSON.stringify(video));
 		
 		console.log( `done: ${i}/${response.data.length}` );
-	}//	file_list = file_list.sort(() => Math.random()-0.5)
+	}
+	
+	//	file_list = file_list.sort(() => Math.random()-0.5)
+	fs.writeFileSync('./data',file_list.join('\n'));
 	
 };
 
@@ -54,21 +57,16 @@ getDB = async()=>{
 			video.id = data[2].slice(1);
 			video.image = data[4].replace('https:/','');
 			video.category = (`${data[5]},${data[6]},${data[7]}`).split(',');
-		
-			if( video.name != prev_name )
-				file_list.push(JSON.stringify(video));
+			
+			if( video.name != prev_name ) file_list.push(JSON.stringify(video));
 		
 			prev_name = video.name;
-		//	lineReader.close();
 	
 		} catch(e) { console.log(e,line); }
 	
 	});
 	
-	lineReader.on('close',()=>{ getHot();
-	//	file_list = file_list.sort(() => Math.random()-0.5)
-		fs.writeFileSync('./data',file_list.join('\n'));
-	});
+	lineReader.on('close',()=>{ getHot(); });
 
 };	getDB();
 
