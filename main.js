@@ -284,7 +284,9 @@ server = http2.createSecureServer( getSecureKey(),router )
 	console.log(`started at http://localhost:${port}`)
 });
 
+/*
 http1.createServer( redirect )
-.listen('passenger','0.0.0.0',()=>{
+.listen(4000,'0.0.0.0',()=>{
 	console.log(`started at http://localhost:${port}`)
 });
+*/
