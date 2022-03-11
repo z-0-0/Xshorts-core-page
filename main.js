@@ -279,14 +279,14 @@ router = (req,res)=>{
 	
 }
 
+/*
 server = http2.createSecureServer( getSecureKey(),router )
 .listen(port,'0.0.0.0',()=>{
 	console.log(`started at http://localhost:${port}`)
 });
+*/
 
-/*
 http1.createServer( redirect )
 .listen(4000,'0.0.0.0',()=>{
 	console.log(`started at http://localhost:${port}`)
 });
-*/
