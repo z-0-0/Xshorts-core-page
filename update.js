@@ -12,7 +12,7 @@ getHot = async()=>{
 	//https://store.externulls.com/facts/tag?slug=index&limit=100000000&offset=0
 	//https://store.externulls.com/facts/tag?id=27173&limit=100000000&offset=0
 	let response = await axios.get( 'https://store.externulls.com/facts/tag?slug=index&limit=100000&offset=0',{ responseType: 'json' } )
-	
+		
 	for( var i in response.data ){
 		let data = response.data[i];
 		let video = new Object();
@@ -26,7 +26,6 @@ getHot = async()=>{
 		video.image = `/thumbs-015.externulls.com/videos/${video.id}/${video.thumbs}.jpg/to.webp?size=320x180`
 		
 		data.tags.map( x=>{
-			video.category.push( x['id'].toString() );
 			video.category.push( x['tg_slug'] );
 			video.category.push( 'hot' );
 		});	file_list.push(JSON.stringify(video));

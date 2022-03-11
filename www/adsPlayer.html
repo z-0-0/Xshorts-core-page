@@ -1,0 +1,116 @@
+<!Doctype html>
+<html>
+
+	<head lang="es">
+		<meta charset="UTF-8">
+		<meta name="description" content="Free Web tutorials">
+  		<meta name="keywords" content="HTML, CSS, JavaScript">
+ 		<meta name="author" content="Enmanuel Becerra">
+  		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<!-- UIkit CSS -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.9.3/dist/css/uikit.min.css" />
+
+		<!-- UIkit JS -->
+		<script src="https://cdn.jsdelivr.net/npm/uikit@3.9.3/dist/js/uikit.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/uikit@3.9.3/dist/js/uikit-icons.min.js"></script>
+
+		<!-- my code -->
+		<script>
+			//https://syndication.realsrv.com/splash.php?idzone=4629722
+			$$= (...args) =>{ return document.querySelectorAll(args); }
+			$ = (...args) =>{ return document.querySelector(args); }
+			
+			window.onload = ()=>{
+				let parser = new DOMParser();
+			
+				fetch( '/vast.xml' )
+				.then( async(response)=>{
+					xmlDoc = parser.parseFromString( await response.text() ,"text/xml");
+					
+					let _impression = xmlDoc.querySelector('Impression').childNodes[1].nodeValue;
+					let _click = xmlDoc.querySelector('ClickThrough').childNodes[1].nodeValue;
+					let _tracking = xmlDoc.querySelector('Tracking').childNodes[1].nodeValue;
+					let _video = xmlDoc.querySelector('MediaFile').childNodes[1].nodeValue;
+					let _error = xmlDoc.querySelector('Error').childNodes[1].nodeValue;
+					
+					let _skip = xmlDoc.querySelector('Linear').attributes.skipoffset.value
+					let _duration = xmlDoc.querySelector('Duration').innerHTML;
+					
+					console.log( _impression );
+					console.log( _tracking );
+					console.log( _click );
+					console.log( _video );
+					console.log( _error );
+					
+					document.querySelector('video').src=_video;
+				})
+			}
+			
+		</script>
+
+	</head>
+
+	<body>	
+		
+		
+		<style>
+			.uk-video-button{
+				mix-blend-mode: soft-light;
+			}
+			.uk-video-button:hover{
+				mix-blend-mode: initial;
+			}
+		</style>
+		
+		<container class="uk-inline uk-flex uk-flex-column uk-flex-center uk-flex-middle">
+			<div class="uk-position-center">
+				<img id="play" style="width:150px; height:150px" src="/svg/play.svg"></img>
+				<img id="play" style="width:150px; height:150px" src="/svg/pause.svg" hidden></img>
+			</div>
+			<video></video>
+			<div class="controls uk-flex uk-flex-middle uk-position-bottom uk-padding-small uk-overlay-primary" data-state="visible">
+			    <span> 03:00:00 </span>
+			    <input class="uk-width-expand" type="range" min="1" max="100" value="50">
+			   	<a id="vol" class="uk-icon uk-icon-image uk-video-button" style="background-image: url(/svg/normal_volume.svg);"></a>
+				<div class="uk-inline">
+					<a class="uk-icon uk-icon-image uk-video-button" style="background-image: url(/svg/tune.svg);"></a>
+					<div class="uk-margin-remove" uk-drop="pos:top; mode: click">
+						<div class="uk-child-width-1-1 uk-flex-left">
+							<a class="uk-button uk-button-secondary"> 1080p </a>
+							<a class="uk-button uk-button-secondary"> 720p </a>
+							<a class="uk-button uk-button-secondary"> 480p </a>
+							<a class="uk-button uk-button-secondary"> 240p </a>
+						</div>
+					</div>
+				</div>
+				<a id="fullscreen">
+					<span class="uk-icon uk-icon-image uk-video-button" style="background-image: url(/svg/enter_fullscreen.svg);"></span>
+					<span class="uk-icon uk-icon-image uk-video-button" style="background-image: url(/svg/exit_fullscreen.svg);" hidden></span>
+				</a>
+			</div>
+		</container>
+		
+		
+		
+		<script>
+			let buttons = $$('.uk-video-button');
+			
+			$('video').onclick = ()=>{
+				$$('#play').forEach( item=>UIkit.toggle( item ).toggle() );
+				if( $('video').paused ) $('video').play();
+				else $('video').pause();					
+			}
+	
+			$('#fullscreen').onclick = ()=>{
+				let nodes = $('#fullscreen').children
+				nodes.forEach( item=>UIkit.toggle( item ).toggle() );
+				if( $('document').paused ) $('video').play();
+				else $('video').pause();				
+			}
+			
+		</script>
+		
+	</body>	
+
+</html>

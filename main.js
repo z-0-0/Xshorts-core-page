@@ -2,7 +2,8 @@
 
 const readline = require('readline');
 const axios = require('axios');
-const http = require('http');
+const http2 = require('http2');
+const http1 = require('http');
 const url = require('url');
 const fs = require('fs');
 
@@ -72,8 +73,8 @@ const mimeType = {
 //TODO: header Functions XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX   //
 header = ( mimeType="text/plain" )=>{
 	return { 
+	//	'cache-control': 'public, max-age=533',
 		'Access-Control-Allow-Origin':'*',
-		'cache-control': 'public, max-age=533',
 		'Content-Type':mimeType 
 	};
 }
@@ -82,7 +83,7 @@ chunkheader = ( start,end,size,mimeType="text/plain" )=>{
 	const contentLength = end-start+1;
 	return {
 		"Content-Range":`bytes ${start}-${end}/${size}`,
-		'cache-control': 'public, max-age=533',
+	//	'cache-control': 'public, max-age=533',
 		"Access-Control-Allow-Origin":"*",
 		"Content-Length":contentLength,
 		"Content-Type": mimeType,
@@ -90,11 +91,33 @@ chunkheader = ( start,end,size,mimeType="text/plain" )=>{
 	};
 }
 
+//TODO: Secure Key XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX //
+getSecureKey = ()=>{
+	return {
+	 	key: fs.readFileSync('./key/key.pem'),
+	  	cert: fs.readFileSync('./key/cert.pem')
+	}
+}
+
 //TODO: 404 Page Error XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
-_404_ = ()=>{ return fs.readFileSync(`${path}/404.html`); }
+_404_ = ()=>{ 
+	let url = `${path}/404.html`
+	if( fs.existsSync(url) )
+		return fs.readFileSync(`${path}/404.html`); 
+		return '404 not found';
+}
 
 //TODO: Server Started ###################################################### //
-http.createServer( (req, res)=>{ 
+redirect = (req,res)=>{
+	
+	var q = url.parse(req.url, true);
+	var d = q.query;
+	
+	res.writeHead(301, {'Location': `https:/18yporn.ml${q.path}`});
+	res.end();
+}
+
+router = (req,res)=>{ 
 	
 	var q = url.parse(req.url, true);
 	var d = q.query;
@@ -254,7 +277,14 @@ http.createServer( (req, res)=>{
 		res.end( _404_() );
 	}	
 	
-}).listen(port,'0.0.0.0',()=>{
-	console.log(`server started at localhost:${port}`)
+}
+
+server = http2.createSecureServer( getSecureKey(),router )
+.listen(port,'0.0.0.0',()=>{
+	console.log(`started at http://localhost:${port}`)
 });
 
+http1.createServer( redirect )
+.listen('passenger','0.0.0.0',()=>{
+	console.log(`started at http://localhost:${port}`)
+});
