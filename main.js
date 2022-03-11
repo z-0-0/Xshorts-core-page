@@ -122,7 +122,7 @@ router = (req,res)=>{
 	var q = url.parse(req.url, true);
 	var d = q.query;
 	
-	console.log( req.url )
+	console.log( req.headers )
 	//TODO: redirect Pages ################################################## //
 	if( req.url.startsWith('http:') ){
 		console.log('redirected')
