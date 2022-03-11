@@ -72,9 +72,9 @@ const mimeType = {
 //TODO: header Functions XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX   //
 header = ( mimeType="text/plain" )=>{
 	return { 
-	//	'Content-Security-Policy-Reporn-Only': "default-src 'self'; font-src 'self'; img-src 'self'; frame-src 'self';",
-	//	'Strict-Transport-Security': 'max-age=31536000; preload',
-	//	'cache-control': 'public, max-age=31536000',
+		'Content-Security-Policy-Reporn-Only': "default-src 'self'; font-src 'self'; img-src 'self'; frame-src 'self';",
+		'Strict-Transport-Security': 'max-age=31536000; preload',
+		'cache-control': 'public, max-age=6000',
 		'Access-Control-Allow-Origin':'*',
 		'Content-Type':mimeType 
 	};
@@ -83,10 +83,10 @@ header = ( mimeType="text/plain" )=>{
 chunkheader = ( start,end,size,mimeType="text/plain" )=>{
 	const contentLength = end-start+1;
 	return {
-	//	'Content-Security-Policy-Reporn-Only': "default-src 'self'; font-src 'self'; img-src 'self'; frame-src 'self';",
-	//	'Strict-Transport-Security': 'max-age=31536000; preload',
+		'Content-Security-Policy-Reporn-Only': "default-src 'self'; font-src 'self'; img-src 'self'; frame-src 'self';",
+		'Strict-Transport-Security': 'max-age=31536000; preload',
 		"Content-Range":`bytes ${start}-${end}/${size}`,
-	//	'cache-control': 'public, max-age=31536000',
+		'cache-control': 'public, max-age=6000',
 		"Access-Control-Allow-Origin":"*",
 		"Content-Length":contentLength,
 		"Content-Type": mimeType,
