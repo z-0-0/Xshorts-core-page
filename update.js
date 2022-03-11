@@ -2,8 +2,6 @@
 
 const readline = require('readline');
 const axios = require('axios');
-const http = require('http');
-const url = require('url');
 const fs = require('fs');
 
 var file_list = new Array();
