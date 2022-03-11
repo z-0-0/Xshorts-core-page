@@ -94,6 +94,14 @@ chunkheader = ( start,end,size,mimeType="text/plain" )=>{
 	};
 }
 
+//TODO: 404 Page Error XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
+_404_ = ()=>{ 
+	let url = `${path}/404.html`
+	if( fs.existsSync(url) )
+		return fs.readFileSync(`${path}/404.html`); 
+		return '404 not found';
+}
+
 //TODO: Server Started ###################################################### //
 router = (req,res)=>{ 
 	
@@ -104,14 +112,12 @@ router = (req,res)=>{
 	if( q.pathname=="/" ){
 		fs.readFile(`${path}/index.html`, (err,data)=>{
 			if (err) {
-				res.writeHead(301,{'Location':'/404'})
-				return res.end();
-			}
+				res.writeHead(404, header('text/html'));
+				return res.end( _404_() ); }
 			res.writeHead(200,header('text/html'));
 			res.write(data); res.end();
 		});
 	}
-	
 	else if( fs.existsSync(`${path}${q.pathname}.html`) ){
 		let data = fs.readFileSync(`${path}${q.pathname}.html`);
 		res.writeHead(200,header('text/html'));
@@ -253,8 +259,8 @@ router = (req,res)=>{
 			}
 		}
 		
-		res.writeHead(301,{'Location':'/404'})
-		res.end();
+		res.writeHead(404, header('text/html'));
+		res.end( _404_() );
 	}	
 	
 }
