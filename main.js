@@ -2,7 +2,7 @@
 
 const readline = require('readline');
 const axios = require('axios');
-const http = require('http2');
+const http = require('http');
 const url = require('url');
 const fs = require('fs');
 
@@ -269,7 +269,7 @@ router = (req,res)=>{
 	
 }
 
-http.createSecureServer( getSecureKey(),router )
+http.createServer( router )
 .listen(port,'0.0.0.0',()=>{
 	console.log(`started at http://localhost:${port}`)
 });
