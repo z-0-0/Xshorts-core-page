@@ -84,6 +84,7 @@ chunkheader = ( start,end,size,mimeType="text/plain" )=>{
 	const contentLength = end-start+1;
 	return {
 		'Content-Security-Policy-Reporn-Only': "default-src 'self'; font-src 'self'; img-src 'self'; frame-src 'self';",
+		'Strict-Transport-Security': 'max-age=31536000; preload',
 		"Content-Range":`bytes ${start}-${end}/${size}`,
 	//	'cache-control': 'public, max-age=533',
 		"Access-Control-Allow-Origin":"*",
