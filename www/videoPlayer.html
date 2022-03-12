@@ -8,64 +8,25 @@
  		<meta name="author" content="Enmanuel Becerra">
   		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+		<!-- UIkit CSS -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.9.3/dist/css/uikit.min.css" />
+
 		<!-- UIkit -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.11.1/js/uikit.min.js" async></script>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.11.1/css/uikit.min.css"/>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.11.1/js/uikit.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/uikit@3.11.1/dist/js/uikit-icons.min.js"></script>
 
 		<!-- my code -->
-		<script>
-			//https://syndication.realsrv.com/splash.php?idzone=4629722
-			$$= (...args) =>{ return document.querySelectorAll(args); }
-			$ = (...args) =>{ return document.querySelector(args); }
-			
-			window.onload = ()=>{
-				let parser = new DOMParser();
-			
-				fetch( '/vast.xml' )
-				.then( async(response)=>{
-					xmlDoc = parser.parseFromString( await response.text() ,"text/xml");
-					
-					let _skip = Number(xmlDoc.querySelector('Linear').attributes.skipoffset.value.replace(/:/g,''));
-					let _duration = Number(xmlDoc.querySelector('Duration').innerHTML.replace(/:/g,''));
-					let _impression = xmlDoc.querySelector('Impression').childNodes[1].nodeValue;
-					let _click = xmlDoc.querySelector('ClickThrough').childNodes[1].nodeValue;
-					let _tracking = xmlDoc.querySelector('Tracking').childNodes[1].nodeValue;
-					let _video = xmlDoc.querySelector('MediaFile').childNodes[1].nodeValue;
-					let _error = xmlDoc.querySelector('Error').childNodes[1].nodeValue;
-					
-					console.log( _skip,_duration )
-					console.log( _impression );
-					console.log( _tracking );
-					console.log( _click );
-					console.log( _video );
-					console.log( _error );
-					
-					document.querySelector('video').src=_video;
-				});
-				
-			}
-			
-		</script>
+		<script src="/js/event.js"></script>
+		<script src="/js/videoPlayer.js"></script>
+		<link rel="stylesheet" href="/css/theme.css"/>
 
 	</head>
 
 	<body>
 		
-		<container class="uk-inline uk-flex uk-flex-column uk-flex-center uk-flex-middle">
-			<div class="uk-position-center">
-				<img id="play" style="width:150px; height:150px" src="/svg/play.svg"></img>
-				<img id="play" style="width:150px; height:150px" src="/svg/pause.svg" hidden></img>
-			</div>
-			<a class="uk-position-small uk-position-top-right uk-button uk-button-secondary"> skip </a>
-			<video preload="auto" playsinline autoplay></video>
-			<div class="uk-child-width-1-4 uk-width-expand uk-flex">
-				<a class="uk-button uk-button-secondary"> 1080p </a>
-				<a class="uk-button uk-button-secondary"> 720p </a>
-				<a class="uk-button uk-button-secondary"> 480p </a>
-				<a class="uk-button uk-button-secondary"> 240p </a>
-			</div>
-		</container>
-				
+		<video id="videoPlayer"></video>
+		
 	</body>	
 
 </html>

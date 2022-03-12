@@ -16,100 +16,40 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.11.1/css/uikit.min.css"/>
 
 		<!-- my code -->
-		<script>
-			//https://syndication.realsrv.com/splash.php?idzone=4629722
-			$$= (...args) =>{ return document.querySelectorAll(args); }
-			$ = (...args) =>{ return document.querySelector(args); }
-			
-			window.onload = ()=>{
-				let parser = new DOMParser();
-			
-				fetch( '/vast.xml' )
-				.then( async(response)=>{
-					xmlDoc = parser.parseFromString( await response.text() ,"text/xml");
-					
-					let _impression = xmlDoc.querySelector('Impression').childNodes[1].nodeValue;
-					let _click = xmlDoc.querySelector('ClickThrough').childNodes[1].nodeValue;
-					let _tracking = xmlDoc.querySelector('Tracking').childNodes[1].nodeValue;
-					let _video = xmlDoc.querySelector('MediaFile').childNodes[1].nodeValue;
-					let _error = xmlDoc.querySelector('Error').childNodes[1].nodeValue;
-					
-					let _skip = xmlDoc.querySelector('Linear').attributes.skipoffset.value
-					let _duration = xmlDoc.querySelector('Duration').innerHTML;
-					
-					console.log( _impression );
-					console.log( _tracking );
-					console.log( _click );
-					console.log( _video );
-					console.log( _error );
-					
-					document.querySelector('video').src=_video;
-				})
-			}
-			
-		</script>
+		<link rel="stylesheet" href="/css/theme.css"/>
 
 	</head>
 
-	<body>	
+	<body>
 		
-		
-		<style>
-			.uk-video-button{
-				mix-blend-mode: soft-light;
-			}
-			.uk-video-button:hover{
-				mix-blend-mode: initial;
-			}
-		</style>
-		
-		<container class="uk-inline uk-flex uk-flex-column uk-flex-center uk-flex-middle">
-			<div class="uk-position-center">
-				<img id="play" style="width:150px; height:150px" src="/svg/play.svg"></img>
-				<img id="play" style="width:150px; height:150px" src="/svg/pause.svg" hidden></img>
-			</div>
+		<videoPlayer class="uk-inline uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-light">
 			<video></video>
-			<div class="controls uk-flex uk-flex-middle uk-position-bottom uk-padding-small uk-overlay-primary" data-state="visible">
-			    <span> 03:00:00 </span>
-			    <input class="uk-width-expand" type="range" min="1" max="100" value="50">
-			   	<a id="vol" class="uk-icon uk-icon-image uk-video-button" style="background-image: url(/svg/normal_volume.svg);"></a>
-				<div class="uk-inline">
-					<a class="uk-icon uk-icon-image uk-video-button" style="background-image: url(/svg/tune.svg);"></a>
-					<div class="uk-margin-remove" uk-drop="pos:top; mode: click">
-						<div class="uk-child-width-1-1 uk-flex-left">
-							<a class="uk-button uk-button-secondary"> 1080p </a>
-							<a class="uk-button uk-button-secondary"> 720p </a>
-							<a class="uk-button uk-button-secondary"> 480p </a>
-							<a class="uk-button uk-button-secondary"> 240p </a>
-						</div>
-					</div>
+			<div class="uk-position-bottom uk-flex uk-flex-column uk-flex-right uk-position-cover">
+				<div class="uk-position-center">
+					<img id="play" style="width:150px; height:150px" src="/svg/play.svg"></img>
 				</div>
-				<a id="fullscreen">
+			    <div class="uk-overlay-primary uk-position-medium uk-position-top-right">
+			    	<a href="" style="border-radius:10px" class="uk-button uk-button-default"> Skip </a>
+			    </div>
+			    <div class="uk-position-top-left uk-position-medium uk-flex uk-flex-column uk-flex-right">
+					<a class="uk-icon uk-icon-image uk-video-button" style="background-image: url(/svg/tune.svg);"></a>
+					<ul style="background:#222" class="uk-list uk-list-divider uk-text-center" uk-dropdown="mode: click">
+						<li><a class="uk-button-link"> 1080p Quality </a></li>
+						<li><a class="uk-button-link"> 720p Quality </a></li>
+						<li><a class="uk-button-link"> 480p Quality </a></li>
+						<li><a class="uk-button-link"> 240p Quality </a></li>
+					</ul>
+				</div>
+			    <div class="uk-flex uk-flex-middle uk-padding-small uk-overlay-primary"">
+					<span> 03:00:00 </span>
+					<input class="uk-width-expand" type="range" min="1" max="100" value="50">
+					<!--
+				   	<a id="vol" class="uk-icon uk-icon-image uk-video-button" style="background-image: url(/svg/normal_volume.svg);"></a>
+					-->
 					<span class="uk-icon uk-icon-image uk-video-button" style="background-image: url(/svg/enter_fullscreen.svg);"></span>
-					<span class="uk-icon uk-icon-image uk-video-button" style="background-image: url(/svg/exit_fullscreen.svg);" hidden></span>
-				</a>
+			    </div>
 			</div>
-		</container>
-		
-		
-		
-		<script>
-			let buttons = $$('.uk-video-button');
-			
-			$('video').onclick = ()=>{
-				$$('#play').forEach( item=>UIkit.toggle( item ).toggle() );
-				if( $('video').paused ) $('video').play();
-				else $('video').pause();					
-			}
-	
-			$('#fullscreen').onclick = ()=>{
-				let nodes = $('#fullscreen').children
-				nodes.forEach( item=>UIkit.toggle( item ).toggle() );
-				if( $('document').paused ) $('video').play();
-				else $('video').pause();				
-			}
-			
-		</script>
+		</videoPlayer>
 		
 	</body>	
 
