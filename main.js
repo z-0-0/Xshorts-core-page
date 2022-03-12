@@ -107,13 +107,7 @@ router = (req,res)=>{
 	
 	var q = url.parse(req.url, true);
 	var d = q.query;
-	
-	//TODO: Redirect Pages ################################################## //
-	try{
-		if(req.headers['X-Forwarded-Proto'].indexOf("https")<0)
-			res.redirect('https://' + req.hostname + req.url);
-	} catch(e){ }
-				
+					
 	//TODO: Server Pages #################################################### //
 	if( q.pathname=="/" ){
 		fs.readFile(`${path}/index.html`, (err,data)=>{
