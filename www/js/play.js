@@ -15,7 +15,7 @@ window.onload=()=>{
 		$('video').poster = data.image;		
 		loadVideos(); events(); 
 		
-		$('video').setAttribute('src',`/${data.hls['fl_cdn_480']}`);
+		$('video').setAttribute('src',`/${data.hls['fl_cdn_240']}`);
 		$('video').setAttribute('ads',`https://syndication.realsrv.com/splash.php?idzone=4629722`);
 		startVast();
 	
