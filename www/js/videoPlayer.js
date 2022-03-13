@@ -50,7 +50,7 @@ class _VAST_ADS {
 		
 			result.src = xmlDoc.querySelector('MediaFile').textContent;		
 		//	result.events.push([ 'error', xmlDoc.querySelector('Error').textContent ]);
-			result.events.push([ 'load', xmlDoc.querySelector('Impression').textContent ]);
+			result.events.push([ 'canplay', xmlDoc.querySelector('Impression').textContent ]);
 		
 			this.data = result; return true;
 		} catch(e) { return false; }
