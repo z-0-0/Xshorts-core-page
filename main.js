@@ -117,8 +117,7 @@ router = (req,res)=>{
 			res.writeHead(200,header('text/html'));
 			res.write(data); res.end();
 		});
-	}
-	else if( fs.existsSync(`${path}${q.pathname}.html`) ){
+	} else if( fs.existsSync(`${path}${q.pathname}.html`) ) {
 		let data = fs.readFileSync(`${path}${q.pathname}.html`);
 		res.writeHead(200,header('text/html'));
 		res.end(data);
@@ -247,17 +246,22 @@ router = (req,res)=>{
 		const keys = Object.keys(mimeType);
 		for( var i in keys ){
 			if( q.pathname.endsWith(keys[i]) ){
+				
 				const range = req.headers.range;
 				this.url = (`${path}${q.pathname}`).replace(/%20/g,' ');
-				
-				if( fs.existsSync(this.url) ){
-					let data = fs.readFileSync(this.url);
-					res.writeHead(200, header( mimeType[keys[i]] ));
-					return res.end( data );
-				}
-				
+			
+				try{ 	
+					if( fs.existsSync( this.url ) ){
+						res.writeHead(200, header( mimeType[keys[i]] ));
+						res.end( fs.readFileSync( this.url ) );
+					}	
+					
+				} catch(e) {
+					res.writeHead(404, header('text/html'));
+					res.end( _404_() );
+				}	return 0;		
 			}
-		}
+		}	
 		
 		res.writeHead(404, header('text/html'));
 		res.end( _404_() );

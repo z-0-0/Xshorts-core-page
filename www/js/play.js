@@ -14,13 +14,10 @@ window.onload=()=>{
 		query.set('search','random');
 		$('video').poster = data.image;		
 		loadVideos(); events(); 
-
-		if (Hls.isSupported()) {
-			var hls = new Hls();
-				hls.loadSource( `/${data.hls['fl_cdn_480']}` );
-				hls.attachMedia( $('video') );
-		} else if (video.canPlayType('application/vnd.apple.mpegurl'))
-			$('video').src = `/${data.hls['fl_cdn_480']}`;
+		
+		$('video').setAttribute('src',`/${data.hls['fl_cdn_480']}`);
+		$('video').setAttribute('ads',`https://syndication.realsrv.com/splash.php?idzone=4629722`);
+		startVast();
 	
 	}).catch( err=>console.log(err) );
 	
