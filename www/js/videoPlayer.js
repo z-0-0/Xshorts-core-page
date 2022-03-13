@@ -42,11 +42,9 @@ class _VAST_ADS {
 			try{ result.skip = Number(xmlDoc.querySelector('Linear').attributes.skipoffset.value.replace(/:/g,'')); } 
 			catch(e) { result.skip = result.duration + 1; }
 		
-		/*
 			xmlDoc.querySelectorAll('Tracking').forEach( x=>{
 				result.events.push([ x.attributes.event.value, x.textContent ]);
 			});
-		*/
 		
 			result.src = xmlDoc.querySelector('MediaFile').textContent;		
 		//	result.events.push([ 'error', xmlDoc.querySelector('Error').textContent ]);
