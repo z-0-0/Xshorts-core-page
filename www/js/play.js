@@ -14,6 +14,7 @@ window.onload=()=>{
 		query.set('search','random');
 		$('video').poster = data.image;		
 		loadVideos(); events(); 
+		console.log( data );
 		
 		$('video').setAttribute('src',`/${data.hls['fl_cdn_240']}`);
 		$('video').setAttribute('ads',`https://syndication.realsrv.com/splash.php?idzone=4629722`);
