@@ -29,7 +29,7 @@ function lazyImage(){
 			}
 		});
 	} , config);
-	$$('#videoData > img').forEach( function(image){ observer.observe(image) });
+	$$('#video > img').forEach( function(image){ observer.observe(image) });
 }
 
 
@@ -51,14 +51,12 @@ async function loadVideos(){
 		for( var i in list ){ try{
 			let video = JSON.parse( list[i] );
 			page += ` 
-				<a href="./play?id=${video.id}" class="uk-padding-small uk-child-width-expand" id="video">
-					<div class="uk-inline uk-flex uk-child-width-expand" id="videoData">
-						<img class="uk-inline" src="${db.placeholder}" data-src="${video.image}" alt="${video.name}" id="image"></img>
-						<div class="uk-padding-small uk-padding-remove-vertical uk-overlay-primary uk-position-bottom ">
-							${video.name.slice(0,30)}...
-						</div>
-					</div>
+				<a href="./play?id=${video.id}" class="uk-inline uk-padding-small uk-child-width-expand" id="video">
+					<img class="uk-height-medium" src="${db.placeholder}" data-src="${video.image}" alt="${video.name}" id="image"></img>
 					<video data-id="${video.id}" preload="auto" playsinline hidden muted loop autoplay></video>
+					<div class="uk-position-cover">
+						<spam class="uk-red-badge-actived uk-position-bottom uk-position-medium">${video.name.slice(0,30)}<spam>
+					</div>
 				</a>
 			`;	
 		} catch(e) {} }	
