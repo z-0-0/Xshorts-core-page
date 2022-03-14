@@ -1,7 +1,6 @@
-window.onload=()=>{ 
-	
+window.addEventListener('load', function(){
 	fetch(`/hls?id=${query.get('id')}`)
-	.then( async(response)=>{
+	.then( async function(response){
 		
 		var data = await response.json();
 		
@@ -12,14 +11,14 @@ window.onload=()=>{
 		
 		query.set('filter',data.category[(Math.random()*data.category.length).toFixed(0)]);
 		query.set('search','random');
+		
 		$('video').poster = data.image;		
 		loadVideos(); events(); 
 		console.log( data );
 		
-		$('video').setAttribute('src',`/${data.hls['fl_cdn_480']}`);
 		$('video').setAttribute('ads',`https://syndication.realsrv.com/splash.php?idzone=4629722`);
+		$('video').setAttribute('src',`/${data.hls['fl_cdn_480']}`);
 		startVast();
 	
-	}).catch( err=>console.log(err) );
-	
-}
+	}).catch( function(err){console.log(err)} );
+});

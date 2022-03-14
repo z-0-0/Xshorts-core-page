@@ -1,5 +1,5 @@
-$$= (...args) =>{ return document.querySelectorAll(args); }
-$ = (...args) =>{ return document.querySelector(args); }
+$$= function(...args){ return document.querySelectorAll(args); }
+$ = function(...args){ return document.querySelector(args); }
 
 //TODO: CONSTANTS  XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
 
@@ -10,18 +10,18 @@ const db = new Object();
 const query = new URLSearchParams(window.location.search);
 
 //TODO: lazyImage Fuction  XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
-badge = (list)=>{
+function badge(list){
 	let page = new String();
-	list.forEach( item=>{
+	list.forEach( function(item){
 		page+=`<a class="uk-red-badge" href="/?filter=${item}">${item}</a>`;
 	});	return page;
 }
 
 //TODO: lazyImage Fuction  XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
-lazyImage = ()=>{
+function lazyImage(){
 	const config = { rootMargin: '250px 0px' };
-	var observer = new IntersectionObserver( (entries, observer)=>{
-		entries.forEach( entry=>{
+	var observer = new IntersectionObserver( function(entries, observer){
+		entries.forEach( function(entry){
 			image = entry.target;
 			if( entry.isIntersecting ){
 				image.src = image.dataset.src;
@@ -29,19 +29,19 @@ lazyImage = ()=>{
 			}
 		});
 	} , config);
-	$$('#videoData > img').forEach( (image)=>{ observer.observe(image) });
+	$$('#videoData > img').forEach( function(image){ observer.observe(image) });
 }
 
 
 //TODO: chunck Fuction XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
-getChunkList = async(start,end,filter=query.get('filter'),search=query.get('search'))=>{ 
+async function getChunkList(start,end,filter=query.get('filter'),search=query.get('search')){ 
 	var request = await fetch(`${origin}/request?filter=${filter}&search=${search}&start=${start}&end=${start+end}`);
 	return request.json();
 }
 
 //TODO: LoadVideos XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
 // <div class="uk-position-center uk-light" uk-spinner="ratio:3" hidden></div>
-loadVideos = async()=>{
+async function loadVideos(){
 	if( $('spinner').hidden ){
 		$('spinner').hidden = false;
 		var list = await getChunkList( $$("#video").length,min );
@@ -64,38 +64,39 @@ loadVideos = async()=>{
 }
 
 //TODO: Main Fuction   XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
-viedeoEvents = ()=>{
+function viedeoEvents(){
 	
-	$$('#video').forEach( item=>{
+	$$('#video').forEach( function(item){
 		var child = item.children;		
-		item.onmouseenter = ()=>{
+		
+		item.addEventListener('mouseenter', function(){
 		//	child[0].children[2].hidden = false;
 			child[1].src=`/vp.externulls.com/new/480p/${child[1].dataset.id}.mp4`;
-			child[1].oncanplay = ()=>{
+			child[1].addEventListener('canplay',function(){
 				child[0].hidden = true; child[1].hidden = false;
-			}
-		}
+			});
+		});
 		
-		item.onmouseleave = ()=>{
+		item.addEventListener('mouseleave', function(){
 			child[1].src=``;
 		//	child[0].children[2].hidden = true;
 			child[0].hidden = false; child[1].hidden = true;
-		}
+		});
 		
 	});
 
 }
 
-events = ()=>{
+function events(){
 	
-	$('#loadMore').onclick = ()=>{ window.onloadmore(); }
+	$('#loadMore').addEventListener('click', function(){ window.onloadmore(); });
 	
-	$$('#txt_search').forEach( item=>{
-		item.onchange = ()=>{ window.location=`/?filter=${item.value}`; }
+	$$('#txt_search').forEach( function(item){
+		item.addEventListener('change', function(){ window.location=`/?filter=${item.value}`; });
 	});
+	
 }
  
 // main Fuction XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX// 
-window.onloadmore=()=>{ loadVideos(); }
-
+window.onloadmore = function(){ loadVideos(); }
 

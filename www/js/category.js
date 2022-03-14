@@ -1,28 +1,3 @@
-//TODO: LoadVideos XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
-loadVideos = async()=>{
-	fetch('/store.externulls.com/tag/facts/tags?slug=index')
-	.then( async(response)=>{
-		var data = await response.json();
-		var page = '';
-		var d = '';
-		
-		data.forEach( item=>{
-			page+=` <a href="/?filter=${item['tg_slug']}" class="uk-button uk-button-default"> ${item['tg_name']} </a> `;
-			d+=`<a class="uk-red-badge" href="/?filter=${item['tg_slug']}">${item['tg_name']}</a>`
-		});
-		
-		console.log(d)
-		//console.log( page );
-		//$('#videos').innerHTML = page;		
-		
-	}).catch(e=>console.log(e));
-}
-
-//TODO: Main Fuction   XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
-events = ()=>{	
-	$$('#txt_search').forEach( item=>{
-		item.onchange = ()=>{ window.location=`/?filter=${item.value}`; }
-	});
-}
- 
-window.onload=()=>{ loadVideos(); events(); }
+window.addEventListener('load', function(){
+	loadVideos(); events();
+});

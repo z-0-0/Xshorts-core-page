@@ -1,1 +1,3 @@
-window.onload=()=>{ loadVideos(); events(); }
+window.addEventListener('load', function(){
+	loadVideos(); events();
+});
