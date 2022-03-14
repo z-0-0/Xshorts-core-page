@@ -43,11 +43,14 @@ async function getChunkList(start,end,filter=query.get('filter'),search=query.ge
 // <div class="uk-position-center uk-light" uk-spinner="ratio:3" hidden></div>
 async function loadVideos(){
 	if( $('spinner').hidden ){
+	
+		var page = new String();
 		$('spinner').hidden = false;
 		var list = await getChunkList( $$("#video").length,min );
+		
 		for( var i in list ){ try{
 			let video = JSON.parse( list[i] );
-			$('#videos').innerHTML += ` 
+			page += ` 
 				<a href="./play?id=${video.id}" class="uk-padding-small uk-child-width-expand" id="video">
 					<div class="uk-inline uk-flex uk-child-width-expand" id="videoData">
 						<img class="uk-inline" src="${db.placeholder}" data-src="${video.image}" alt="${video.name}" id="image"></img>
@@ -58,8 +61,10 @@ async function loadVideos(){
 					<video data-id="${video.id}" preload="auto" playsinline hidden muted loop autoplay></video>
 				</a>
 			`;	
-		} catch(e) {}
-		}	$('spinner').hidden=true; lazyImage(); viedeoEvents();
+		} catch(e) {} }	
+		
+		$('#videos').innerHTML += page;
+		$('spinner').hidden=true; lazyImage(); viedeoEvents();
 	}	
 }
 
