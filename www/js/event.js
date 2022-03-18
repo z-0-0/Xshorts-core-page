@@ -3,10 +3,9 @@ $ = function(...args){ return document.querySelector(args); }
 
 //TODO: CONSTANTS  XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
 
-const min = 20;
-const origin = window.origin;
-const db = new Object();
-	  db.placeholder = "./img/18yPorn.png";
+const min = 30;
+const db = new Object(); db.page=1;
+	  db.placeholder = "./img/placeholder.png";
 const query = new URLSearchParams(window.location.search);
 
 //TODO: lazyImage Fuction  XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
@@ -34,32 +33,58 @@ function lazyImage(){
 
 
 //TODO: chunck Fuction XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
-async function getChunkList(start,end,filter=query.get('filter'),search=query.get('search')){ 
-	var request = await fetch(`${origin}/request?filter=${filter}&search=${search}&start=${start}&end=${start+end}`);
-	return request.json();
+async function getChunkList(){ 
+	var offset = $$('video').length;
+	var url = "https://store.externulls.com/facts";
+	var search = 'id=27173';//window.location.search.replace('?','');
+	var request = await fetch(`${url}/tag?${search}&limit=40&offset=${offset}`);
+	var data = await request.json()
+	
+	data = data.map( x=>{
+	
+		var id =  x.fc_file_id;
+		var tmb = x.fc_facts[0].fc_thumbs[0];
+	
+		return {
+			id: id,
+			name: x.file.stuff.sf_name,
+			story: x.file.stuff.sf_story,
+			views: x.fc_facts[0].fc_views,
+			likes: x.fc_facts[0].fc_likes,
+			dislikes: x.fc_facts[0].fc_dislikes,
+			vid: `/vp.externulls.com/new/480p/${id}.mp4`,
+			img: `/thumbs-015.externulls.com/videos/${id}/${tmb}.jpg/to.webp?size=320x180`,
+		}
+	});	
+	
+	return data;
+}
+
+async function suggest( text ){ 
+	var url = "https://api.redgifs.com/v1/tags";
+	var request = await fetch(`${url}/suggest?query=${text}`);
+	var data = await request.json(); return data;
 }
 
 //TODO: LoadVideos XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
-// <div class="uk-position-center uk-light" uk-spinner="ratio:3" hidden></div>
 async function loadVideos(){
 	if( $('spinner').hidden ){
-	
+		
 		var page = new String();
 		$('spinner').hidden = false;
-		var list = await getChunkList( $$("#video").length,min );
+		var list = await getChunkList();
 		
-		for( var i in list ){ try{
-			let video = JSON.parse( list[i] );
+		for( var i in list ){ try{		
 			page += ` 
-				<a href="./play?id=${video.id}" class="uk-inline uk-padding-small uk-child-width-expand" id="video">
-					<img class="uk-height-medium" src="${db.placeholder}" data-src="${video.image}" alt="${video.name}" id="image"></img>
-					<video data-id="${video.id}" preload="auto" playsinline hidden muted loop autoplay></video>
+				<a href="./play?id=${list[i].id}" class="uk-inline uk-padding-small uk-child-width-expand uk-height-medium" id="video">
+					<img src="${db.placeholder}" data-src="${list[i].img}" alt="${list[i].id}" id="image"></img>
+					<video data-src="${list[i].vid}" preload="auto" playsinline hidden muted loop autoplay></video>
 					<div class="uk-position-cover">
-						<spam class="uk-red-badge-actived uk-position-bottom uk-position-medium">${video.name.slice(0,30)}<spam>
+						<spam class="uk-red-badge-actived uk-position-bottom uk-position-medium">${list[i].name.slice(0,30)}<spam>
 					</div>
 				</a>
 			`;	
-		} catch(e) {} }	
+		} catch(e) { console.error(e) } }	
 		
 		$('#videos').innerHTML += page;
 		$('spinner').hidden=true; lazyImage(); viedeoEvents();
@@ -73,17 +98,15 @@ function viedeoEvents(){
 		var child = item.children;		
 		
 		item.addEventListener('mouseenter', function(){
-		//	child[0].children[2].hidden = false;
-			child[1].src=`/vp.externulls.com/new/480p/${child[1].dataset.id}.mp4`;
+			child[1].src=child[1].dataset.src;
 			child[1].addEventListener('canplay',function(){
 				child[0].hidden = true; child[1].hidden = false;
 			});
 		});
 		
 		item.addEventListener('mouseleave', function(){
-			child[1].src=``;
-		//	child[0].children[2].hidden = true;
 			child[0].hidden = false; child[1].hidden = true;
+			child[1].src=``;
 		});
 		
 	});
@@ -91,13 +114,35 @@ function viedeoEvents(){
 }
 
 function events(){
-	
-	$('#loadMore').addEventListener('click', function(){ window.onloadmore(); });
-	
+		
 	$$('#txt_search').forEach( function(item){
-		item.addEventListener('change', function(){ window.location=`/?filter=${item.value}`; });
+		var url = new URL(window.location);
+		
+		item.addEventListener('keydown', async function(){ 
+			var data = await suggest( item.value );
+			var page = new String();
+			
+			data.forEach( x=>{
+				page+=`<option value="${x.text}">`
+			}); $('#suggestions').innerHTML = page;
+		});
+		
+		item.addEventListener('change', function(){ 	
+			if( item.value.startsWith('@') ) {
+				db.subPage=1; addShorts( item.value.replace('@','') ); UIkit.modal( $('modal') ).show();
+				$('modal').querySelector('close').addEventListener('click',function(){
+					$('#video-list').children[0].innerHTML = new String();
+				});
+			} else {
+				url.pathname = '/';	
+				url.searchParams.delete('search_text');
+				url.searchParams.append('search_text',item.value);
+				window.location.href = url;
+			}
+		});
 	});
 	
+	$('#loadMore').addEventListener('click', function(){ window.onloadmore(); });
 }
  
 // main Fuction XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX// 
