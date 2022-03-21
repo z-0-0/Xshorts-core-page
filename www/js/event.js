@@ -9,7 +9,7 @@ const query = new URLSearchParams(window.location.search);
 function badge(list){
 	let page = new String();
 	list.forEach( function(item){
-		page+=`<a class="uk-red-badge" href="/?filter=${item}">${item}</a>`;
+		page+=`<a class="uk-red-badge" href="/?search_text=${item}">${item}</a>`;
 	});	return page;
 }
 

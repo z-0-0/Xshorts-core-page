@@ -1,6 +1,4 @@
 
-console.log( req.query ); 
-
 if( req.query.search_text == '' ){
 	let url = "https://store.externulls.com/facts/tag";
 

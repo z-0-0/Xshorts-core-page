@@ -54,6 +54,10 @@
 					<span class="material-icons md-48">local_fire_department</span>
 					<strong> hot </strong>
 				</a>
+				<a href="/shorts" id="menu" class="uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-padding-small uk-button">
+					<span class="material-icons md-48">app_shortcut</span>
+					<strong> shorts </strong>
+				</a>
 			</div>
 		</aside>
 	
@@ -64,15 +68,15 @@
 					<div class="nav-overlay uk-navbar-left">
 						<a class="uk-navbar-toggle uk-hidden@m" uk-navbar-toggle-icon uk-toggle="target: offcanvas"></a>
 						<a class="uk-navbar-toggle uk-visible@m" id="asideMenu" uk-navbar-toggle-icon uk-toggle="target: #asideMenu; animation: uk-animation-fade" hidden></a>
-						<a class="uk-navbar-item uk-logo" id="logo" style="color:#222" href="/">
-							<strong class="uk-flex" id="title"><div class="uk-text-red">X</div>Shorts</strong>
+						<a class="uk-navbar-item uk-logo uk-text-dark" id="logo" href="/">
+							<strong class="uk-flex" id="title"><div class="uk-text-red">X</div>Shorts</strong> 
 						</a>
 					</div>
 
 					<div class="nav-overlay uk-navbar-right uk-padding-small uk-padding-remove-vertical">
 						<div class="uk-search uk-search-default uk-visible@m">
 							<a class="uk-search-icon-flip" uk-search-icon></a>
-							<input id="txt_search" class="uk-search-input" type="search" placeholder="Search" autofocus>
+							<input id="txt_search" class="uk-search-input" autocomplete="off" type="search" placeholder="Search" list="suggestions" autofocus>
 						</div>
 						<a class="uk-navbar-toggle uk-hidden@m" uk-search-icon uk-toggle="target: .nav-overlay; animation: uk-animation-fade" href="#"></a>
 
@@ -82,7 +86,7 @@
 
 						<div class="uk-navbar-item uk-width-expand">
 							<div class="uk-search uk-search-navbar uk-width-1-1">
-								<input id="txt_search" class="uk-search-input" type="search" placeholder="Search" autofocus>
+								<input id="txt_search" class="uk-search-input" autocomplete="off" type="search" placeholder="Search" list="suggestions" autofocus>
 							</div>
 						</div>
 
@@ -117,7 +121,7 @@
 						</li>
 						<li>
 							<a class="uk-button uk-button-link uk-width-expand uk-inline" href="/shorts">
-								<span class="material-icons md-48 uk-position-left">local_fire_department</span>
+								<span class="material-icons md-48 uk-position-left">app_shortcut</span>
 								shorts
 							</a>
 						</li>
