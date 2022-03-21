@@ -1,13 +1,10 @@
-//TODO: Libreries ########################################################### //
+//TODO: Libreries   XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX //
 
-const readline = require('readline');
 const axios = require('axios');
+const https = require('http2');
 const http = require('http');
 const url = require('url');
 const fs = require('fs');
-
-const path = `${__dirname}/www`;
-const port = process.env.PORT || 3000;
 
 //TODO: String Normalization ################################################ //
 const slugify = str => { const map = {
@@ -23,7 +20,7 @@ const slugify = str => { const map = {
 	}	return str.toLowerCase();
 }
 
-//TODO: String Normalization ################################################ //
+//TODO: String Normalization XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
 const mimeType = {    
     "bmp" : "image/bmp",
     "gif" : "image/gif",
@@ -53,11 +50,9 @@ const mimeType = {
     
     "css" : "text/css",
     "csv" : "text/csv",
-//  "html": "text/html",
-    "txt" : "text/plain",
+    "html": "text/html",
     "text": "text/plain",
     "js"  : "text/javascript",
-    "xml" : "application/xml",
     
     "zip" : "application/zip",
     "pdf" : "application/pdf",
@@ -69,207 +64,141 @@ const mimeType = {
     "m3u8": "application/vnd.apple.mpegurl",
 };
 
-//TODO: header Functions XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX   //
-header = ( mimeType="text/plain" )=>{
-	return { 
-		'Content-Security-Policy-Reporn-Only': "default-src 'self'; font-src 'self'; img-src 'self'; frame-src 'self';",
-		'Strict-Transport-Security': 'max-age=31536000; preload',
-	//	'cache-control': 'public, max-age=6000',
-		'Access-Control-Allow-Origin':'*',
-		'Content-Type':mimeType 
-	};
-}
+//TODO: Main Class  XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX //
 
-chunkheader = ( start,end,size,mimeType="text/plain" )=>{
-	const contentLength = end-start+1;
-	return {
-		'Content-Security-Policy-Reporn-Only': "default-src 'self'; font-src 'self'; img-src 'self'; frame-src 'self';",
-		'Strict-Transport-Security': 'max-age=31536000; preload',
-		"Content-Range":`bytes ${start}-${end}/${size}`,
-	//	'cache-control': 'public, max-age=6000',
-		"Access-Control-Allow-Origin":"*",
-		"Content-Length":contentLength,
-		"Content-Type": mimeType,
-		"Accept-Ranges":"bytes",
-	};
-}
+class molly_class{
 
-//TODO: 404 Page Error XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
-_404_ = ()=>{ 
-	let url = `${path}/404.html`
-	if( fs.existsSync(url) )
-		return fs.readFileSync(`${path}/404.html`); 
-		return '404 not found';
-}
-
-//TODO: Server Started ###################################################### //
-router = (req,res)=>{ 
-	
-	var q = url.parse(req.url, true);
-	var d = q.query;
-					
-	//TODO: Server Pages #################################################### //
-	if( q.pathname=="/" ){
-		fs.readFile(`${path}/index.html`, (err,data)=>{
-			if (err) {
-				res.writeHead(404, header('text/html'));
-				return res.end( _404_() ); }
-			res.writeHead(200,header('text/html'));
-			res.write(data); res.end();
-		});
-	} else if( fs.existsSync(`${path}${q.pathname}.html`) ) {
-		let data = fs.readFileSync(`${path}${q.pathname}.html`);
-		res.writeHead(200,header('text/html'));
-		res.end(data);
+	constructor( Port, front_path, back_path ){
+		this.port = process.env.PORT || Port;
+		this.max_age = 1000 * 60 * 60 * 24;
+		this.timeout = 1000 * 60 * 10;
+		this.front= `${front_path}`;
+		this.back = `${back_path}`; 
 	}
 	
-	//TODO: Server Conditions ############################################### //
-	else if( q.pathname == '/request' ){
+	header=( mimeType="text/plain" )=>{
+		return {
+			'Content-Security-Policy-Reporn-Only': "default-src 'self'; font-src 'self'; img-src 'self'; frame-src 'self';",
+			'Strict-Transport-Security': `max-age=${this.max_age}; preload`,
+		//	'cache-control': `public, max-age=${this.max_age}`,
+		//	'Access-Control-Allow-Origin':'*',
+			'Content-Type':mimeType 
+		};
+	}
+
+	chunkheader=( start,end,size,mimeType="text/plain" )=>{
+		const contentLength = end-start+1;
+		return {
+			'Content-Security-Policy-Reporn-Only': "default-src 'self'; font-src 'self'; img-src 'self'; frame-src 'self';",
+			'Strict-Transport-Security': `max-age=${this.max_age}; preload`,
+		//	'cache-control': `public, max-age=${this.max_age}`,
+			"Content-Range":`bytes ${start}-${end}/${size}`,
+		//	"Access-Control-Allow-Origin":"*",
+			"Content-Length":contentLength,
+			"Content-Type": mimeType,
+			"Accept-Ranges":"bytes",
+		};
+	}
+	
+	router=( req,res )=>{
+		req.parse = url.parse(req.url, true);
+		req.query = req.parse.query;
 		
-		var data = new Array();
-		
-		const readInterface = readline.createInterface({
-			input: fs.createReadStream(`${__dirname}/data`),
-		});
-		
-		try{ let i=0;
-			readInterface.on('line', (line)=>{ 
-			
-				if( i>d.end ) readInterface.close();
-			
-				if( d.filter=='undefined' ){i++; 
-					if( d.start<i && i<d.end ) data.push(line);
-				} else { 
-					let index = slugify(line).search( slugify(d.filter) );
-					if( index>=0 ){ i++; 
-						if( d.start<i && i<d.end ) data.push(line);
-					}
-				}
-					
+		//TODO: _main_ Function  XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
+		try{
+			let data = fs.readFileSync(`${this.back}/_main_.js`);
+			eval( data.toString() );// return 0;
+		} catch(e) { }
+	
+		//TODO: Server Pages XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
+		if( req.parse.pathname=="/" ){
+			fs.readFile(`${this.front}/index.html`, (err,data)=>{
+				if (err) {
+					res.writeHead(404, this.header('text/html'));
+					return res.end( this._404_() ); }
+				res.writeHead(200, this.header('text/html'));
+				return res.end(data);
 			});
-		} catch(e) {}
-		
-		readInterface.on('close', (line)=>{
-			if( d.search=='random' ){
-				data = data.sort(() => Math.random()-0.5)
-			}
-			res.writeHead(200, header('text/plain'));
-			res.end( JSON.stringify(data.reverse()) );
-		});
-		
-	}
+			
+		} else if( fs.existsSync(`${this.front}${req.parse.pathname}.html`) ) {
+			let data = fs.readFileSync(`${this.front}${req.parse.pathname}.html`);
+			res.writeHead(200, this.header('text/html')); 
+			return res.end(data);
+			
+		} else if( fs.existsSync(`${this.back}${req.parse.pathname}.js`) ) {
+			let data = fs.readFileSync(`${this.back}${req.parse.pathname}.js`);
+			eval(` try{ ${data} } catch(err) { console.log( err );
+				res.writeHead(200, this.header('text/html'));
+				res.end('something went wrong'); 
+			}`);return 0;
+		}
 	
-	else if( q.pathname == '/hls' ){
-		axios.get(`https://store.externulls.com/facts/file/${d.id}`,{ responseType: 'json' })
-		.then( async(response)=>{
-			
-			let data = response.data;
-			let video = new Object();
+		//TODO: Server Chunk XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
+		else{
+			const keys = Object.keys(mimeType);
+			for( var i in keys ){
+				if( req.parse.pathname.endsWith(keys[i]) ){
 				
-			video.category = new Array();
-			video.id = data['fc_file_id'];
-			video.duration = data['file']['fl_duration'];
-			video.name = data['file']['stuff']['sf_name'];
-			video.creation = data['fc_facts'][0]['fc_created'];
-			video.thumbs = data['fc_facts'][0]['fc_thumbs'][0];
-			video.image = `/thumbs-015.externulls.com/videos/${video.id}/${video.thumbs}.jpg/to.webp?size=320x180`
-								
-			for( var i in data['tags'] ){
-				video.category.push( data['tags'][i]['tg_slug'] )			
-			}	
+					const range = req.headers.range;
+					const url = (`${this.front}${req.parse.pathname}`).replace(/%20/g,' ');
 			
-			if( response.data['fc_facts'][0]['hls_resources'] === undefined ){
-				video.hls = data['file']['hls_resources'];
-			} else {
-				res.writeHead(200, header('text/plain'));
-				video.hls = data['fc_facts'][0]['hls_resources'];
-			}
-			
-			res.writeHead(200, header('text/plain'));
-			res.end( JSON.stringify(video) );
-			
-		});
-	}
-	
-	else if( q.pathname.startsWith("/thumbs") || q.pathname.startsWith("/vp.") 
-		  || q.pathname.endsWith(".ts") || q.pathname.startsWith("/store") ){
-		axios.get( `https:/${q.path}`,{ responseType: 'arraybuffer' } )
-		.then( async(response)=>{
-			res.writeHead(200, header('text/plain'));
-			res.end( response.data );
-		});
-	}
-	
-	else if( q.pathname.startsWith("/key") ){
-		axios.get( `https://video.beeg.com${q.path}` )
-		.then( async(response)=>{
-				
-			let file = response.data.toString().split('\n');
-			let url = new Array();
-				
-			for( var i in file ){ 
-				if( file[i].startsWith('http') ){
+					try{	
+						if(range) {
+							const chuck_size = Math.pow( 10,6 ); 
+							const size = fs.statSync( url ).size;
+							const start = Number(range.replace(/\D/g,""));
+							const end = Math.min(chuck_size+start,size-1);
+
+							res.writeHead(206, this.chunkheader( start,end,size,mimeType[keys[i]] ));
+							const chuck = fs.createReadStream( url,{start,end} );
+							chuck.pipe( res ); return 0;
 						
-					let index = [
-						file[i].indexOf('http') + 7,
-						file[i].indexOf('.com') + 4,
-						file[i].indexOf('.mp4') + 4,							
-					];
+						} else {
+							if( fs.existsSync( url ) ){
+								res.writeHead(200, this.header( mimeType[keys[i]] ));
+								return res.end( fs.readFileSync( url ) );
+							}
+						}	
+					
+					} catch(e) {} return 0;
 						
-					url = [
-						file[i].slice(index[0],index[1]),
-						file[i].slice(index[1],index[2]),
-						file[i].slice(index[2])
-					];
-					
-					break;
-					
 				}
 			}
 			
-			let done=false; let seg = 0;
-			file = file.map( line=>{
-				if( !line.startsWith('#') && !done ){ seg++; 
-					return `${url[0]}${url[1]}/seg-${seg}-v1-a1.ts`; 
-				} else if( line.startsWith('#EXT-X-ENDLIST') )
-					done=true;
-				return line;
-			});
-							
-			res.writeHead(200, header('text/plain'));
-			res.end( file.join('\n') );
-		});
+			res.writeHead(404, this.header('text/html'));
+			res.end( this._404_() );	
+		}
+	}
+	
+	startHttpServer=()=>{
+		let server = http.createServer( this.router ).listen( this.port,'0.0.0.0',()=>{
+			console.log(`server started at http://localhost:${this.port}`);
+		}); server.setTimeout( this.timeout );	
 	}
 		
-	//TODO: Server Chunk   XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX //
-	else{
-		const keys = Object.keys(mimeType);
-		for( var i in keys ){
-			if( q.pathname.endsWith(keys[i]) ){
-				
-				const range = req.headers.range;
-				this.url = (`${path}${q.pathname}`).replace(/%20/g,' ');
-			
-				try{ 	
-					if( fs.existsSync( this.url ) ){
-						res.writeHead(200, header( mimeType[keys[i]] ));
-						res.end( fs.readFileSync( this.url ) );
-					}	
-					
-				} catch(e) {
-					res.writeHead(404, header('text/html'));
-					res.end( _404_() );
-				}	return 0;		
-			}
-		}	
-		
-		res.writeHead(404, header('text/html'));
-		res.end( _404_() );
-	}	
+	startHttpSecureServer=( key_path, cert_path )=>{
+		let key = {
+			key: fs.readFileSync('localhost-privkey.pem'),
+			cert: fs.readFileSync('localhost-cert.pem')
+		}
 	
-}
+		let server = https.createSecureServer( key, this.router ).listen( this.port,'0.0.0.0',()=>{
+			console.log(`server started at https://localhost:${this.port}`);
+		}); server.setTimeout( this.timeout );		
+	}
+	
+	_404_=()=>{ 
+		let url = `${this.front}/404.html`
+		if( fs.existsSync(url) )
+			return fs.readFileSync(`${this.front}/404.html`); 
+		return 'Oops 404 not found';
+	}
+	
+};	mollyJS = molly_class;
 
-http.createServer( router )
-.listen(port,'0.0.0.0',()=>{
-	console.log(`started at http://localhost:${port}`)
-});
+//TODO: Main Functions  XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX //
+server = new mollyJS( 3000, './www', './controller' );
+server.startHttpServer();
+
+
+
