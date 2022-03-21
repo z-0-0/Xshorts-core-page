@@ -28,22 +28,18 @@ function lazyImage(){
 	$$('#video > img').forEach( function(image){ observer.observe(image) });
 }
 
-
-//TODO: chunck Fuction XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
-async function suggest( text ){ 
-	var request = await fetch(`/suggest?q=${text}`).then(async(response)=>{});
-	$('#suggestions').innerHTML = request.text();
-}
-
 //TODO: LoadVideos XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
 async function loadVideos(){
 	if( $('spinner').hidden ){
 		$('spinner').hidden = false;
 		
-		var id = '27173';
 		var off = $$('video').length;
+		var search = ''
 		
-		fetch(`videos?id=${id}&offset=${off}`)
+		if( query.get('search_text') != null )
+			search = query.get('search_text');
+		
+		fetch(`videos?id=27173&offset=${off}&search_text=${search}`)
 		.then( async( response )=>{
 			$('#videos').innerHTML += await response.text();
 			$('spinner').hidden=true; lazyImage(); viedeoEvents();
@@ -70,15 +66,12 @@ function viedeoEvents(){
 		});
 		
 	});
-
 }
 
 function events(){
 		
 	$$('#txt_search').forEach( function(item){
 		var url = new URL(window.location);
-		
-		item.addEventListener('keydown', async function(){ suggest( item.value ); });
 		
 		item.addEventListener('change', function(){ 	
 			url.pathname = '/';	

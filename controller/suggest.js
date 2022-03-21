@@ -1,8 +1,8 @@
-let url = "https://api.redgifs.com/v1/tags/suggest";
+
 axios.get( `${url}?query=${ req.query.q }`,{ responseType: 'json' })
 .then( async(response)=>{ let page = '';
 	var data = response.data;
-	
+
 	data.forEach( x=>{
 		page+=`<option value="${x.text}">`
 	});	
@@ -11,3 +11,4 @@ axios.get( `${url}?query=${ req.query.q }`,{ responseType: 'json' })
 	res.end( page );
 	
 });
+	
