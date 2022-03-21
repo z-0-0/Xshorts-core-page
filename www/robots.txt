@@ -2,4 +2,4 @@ User-agent: *
 Disallow: /play
 User-agent: Googlebot
 Allow: /
-Sitemap: https://18yporn.ml/sitemap.xml
+Sitemap: https://www.xshorts.ml/sitemap.xml
