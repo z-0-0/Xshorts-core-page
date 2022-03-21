@@ -35,8 +35,9 @@ function lazyImage(){
 //TODO: chunck Fuction XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
 
 async function suggest( text ){ 
-	var request = await fetch(`/suggest?q=${text}`).then(async(response)=>{});
-	$('#suggestions').innerHTML = request.text();
+	fetch(`/suggest?q=${text}`).then(async(response)=>{
+		$('#suggestions').innerHTML = await response.text();
+	});
 }
 
 //TODO: Main Fuction   XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX//
