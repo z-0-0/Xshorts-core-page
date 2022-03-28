@@ -13,8 +13,8 @@ if( req.query.search_text == '' ){
 			let likes = x.fc_facts[0].fc_likes;
 			let tmb = x.fc_facts[0].fc_thumbs[0];
 			let dislikes = x.fc_facts[0].fc_dislikes;
-			let vid = `/vp.externulls.com/new/480p/${id}.mp4`;
-			let img = `/thumbs-015.externulls.com/videos/${id}/${tmb}.jpg/to.webp?size=320x180`;
+			let vid = `path?path=vp.externulls.com/new/480p/${id}.mp4`;
+			let img = `path?path=thumbs-015.externulls.com/videos/${id}/${tmb}.jpg/to.webp?size=320x180`;
 		
 			page += ` 
 				<a href="./play?id=${id}" class="uk-inline uk-padding-small uk-child-width-expand uk-height-medium" id="video">
@@ -28,8 +28,7 @@ if( req.query.search_text == '' ){
 		
 		});	
 	
-		res.writeHead( 200,{'Content-Type':'text/plain'} );
-		res.end( page );
+		res.send( 200, page );
 
 	});
 
@@ -47,8 +46,8 @@ if( req.query.search_text == '' ){
 			let likes = x.fc_facts[0].fc_likes;
 			let tmb = x.fc_facts[0].fc_thumbs[0];
 			let dislikes = x.fc_facts[0].fc_dislikes;
-			let vid = `/vp.externulls.com/new/480p/${id}.mp4`;
-			let img = `/thumbs-015.externulls.com/videos/${id}/${tmb}.jpg/to.webp?size=320x180`;
+			let vid = `path?path=vp.externulls.com/new/480p/${id}.mp4`;
+			let img = `path?path=thumbs-015.externulls.com/videos/${id}/${tmb}.jpg/to.webp?size=320x180`;
 		
 			page += ` 
 				<a href="./play?id=${id}" class="uk-inline uk-padding-small uk-child-width-expand uk-height-medium" id="video">
@@ -62,8 +61,7 @@ if( req.query.search_text == '' ){
 		
 		});	
 	
-		res.writeHead( 200,{'Content-Type':'text/plain'} );
-		res.end( page );
+		res.send( 200, page );
 
 	});
 }

@@ -7,8 +7,7 @@ axios.get( `${url}?query=${ req.query.q }`,{ responseType: 'json' })
 		page+=`<option value="${x.text}">`
 	});	
 	
-	res.writeHead( 200,{'Content-Type':'text/plain'} );
-	res.end( page );
+	res.send( 200, page );
 	
 });
 	

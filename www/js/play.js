@@ -17,21 +17,14 @@ window.addEventListener('load', function(){
 		console.log( data );
 		
 		$('video').setAttribute('ads',`https://syndication.realsrv.com/splash.php?idzone=4629722`);
-		$('video').setAttribute('src',`/${data.hls['fl_cdn_480']}`);
+		$('video').setAttribute('src',`key?path=https_video.beeg.com/${data.hls['fl_cdn_480']}`);
 		
 		if (Hls.isSupported()) {
 			var hls = new Hls();
 				hls.loadSource( $('video').src );
 				hls.attachMedia( $('video') );
 		} else if (video.canPlayType('application/vnd.apple.mpegurl'))
-			this.$('#video-player').src = this.videoSrc;
-		
-	//	this.$('#video-player').controls = true;	
-	//	this.$('#video-player').onclick = null;
-	//	this.$('#video-player').play();
-	//	this.$('#skip').hidden = true;	
-		
-	//	startVast();
+			$('video').src = $('video').src;
 	
 	}).catch( function(err){console.log(err)} );
 });

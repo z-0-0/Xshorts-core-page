@@ -13,7 +13,6 @@ axios.get( `${url}/${req.query.id}/search?order=recent&page=${req.query.page}`,{
 		`;
 	});	
 	
-	res.writeHead( 200,{'Content-Type':'text/plain'} );
-	res.end( page );
+	res.send( 200, page );
 
 });
